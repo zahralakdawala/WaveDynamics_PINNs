@@ -1,0 +1,118 @@
+\section{Data driven and physics informed neural networks}
+\label{sec:neuralnets}
+
+\subsection{A data-driven neural network}
+\label{sec:vanillaNN}
+
+\textcolor{red}{should we use the abbreviation DDNN for data-driven neural network?}
+Neural networks can generally be described by three components, namely neurons, layers and a global
+architecture. Each neuron of a layer is connected to each neuron of the next layer and is associated with a 
+weight, a bias term, and an activation function $\sigma$. If the weight $w_{jk}^l$ connects the $k$-th 
+neuron in the ($l-1$)th layer to the $j$-th neuron in the $l$-th layer, the relationship for the output 
+$u_j^l$ can be written as
+\[
+u_j^l = \sigma\left(\sum_k w^l_{jk} u_k ^{l-1} + b_j^l\right) =  \sigma\left(z_j^l\right).
+\] 
+%The activation function $\sigma$ is usually chosen keeping the following issues in mind: explosion or vanishing gradients, making clear predictions, and computational efficiency.
+The choice of the activation function will be one aspect in our studies. 
+
+The feed forward network uses the principle of back propogation to address how a variation in weight and biases impact the output error.  The sample signal is applied by an activation function before it is
+passed to the next layer. For example, a sample input $x$ with a sigmoid activation function sees a transformation of $f(x) = \frac{1}{1+e^{-x}}$ when it meets the next layer. 
+
+A neural network further needs a routine to update its weights and biases in the direction of minimizing a loss function defined on the output. This routine 
+is generally a (stochastic) gradient descent algorithm or a quasi Newton method. In a supervised regression problem, the output loss is often the mean squared error (MSE) computed using the difference of the actual output value and the desired target value $y(x,t)$:
+\begin{equation}\label{eq:fct_data}
+\mathcal{L}_{\mathrm{data}}= \frac{1}{N} \sum_{x,t} \left\| y(x,t) - \hat{u}^L(x,t) \right\|_2^2,
+\end{equation}
+where $L$ is the number of layers and $N$ is the number of uniformly sampled collocation points defined 
+as the data set $\{ x_i,t_i \}, i \in \{1, \ldots, N\{$.  The output $\hat{u} = f (x, t, \theta)$ is
+expressed as a function of the input $(x, t)$ and network parameters $\theta$ (weights and biases).
+The training process aims to find $\theta$, given the input $(x, t)$, by solving the following optimization problem 
+\[
+\mbox{argmin}_\theta \mathcal{L} \left(\theta\ | \ (x,t ,y)\right),
+\]
+where the function $y$ maps $(x, t)$ to measurements/true solution at those coordinates.
+The training is complete once the network has found parameters such that a 
+desired accuracy of the loss function is reached.
+The function that is learnt is a function that is based just on the input data at $(x,t)$. 
+
+\subsection{Physics informed training of the neural network}
+\label{sec:pinns}
+
+If one is interested in finding the solution of an initial-boundary value problem, then it seems to be 
+a quite natural idea to incorporate this problem into the loss function, i.e., the physics instead of only data. The problem statement for predicting fluid flows models the physics in 
+form of partial differential equations that is defined on a domain, along with some boundary conditions on the boundaries and some initial conditions. To incorporate such physics into the training step of the neural network, the  parameterized form of the problem is considered. Let us denote the neural network by   
+$U(x, t, \theta )$ and the function to be learnt by $\hat{u}(x,t)$, where learning is based on minimizing  a multi-objective loss functional
+\[
+\mathcal{L} (\theta, \nu)  = \sum_{i=1}^k \mathcal{L}_i ( \theta , \nu).
+\]
+In PINNs,  the residuals of the partial differential equation, initial, and boundary conditions are included, 
+where we used the $L^2$-norm $\|\cdot\|_0$  (mean squared error / MSE) on uniformly sampled collocation points prior to training,    
+
+The PINNs with space and time coordinates as described in \cite{??} consist of a multiple dense layers, with weights and biases as described in Section~\ref{sec:vanillaNN}, along with a gradient layer. The derivatives of the output of the vanilla neural network, $u$, are used for calculating the strong residuals of the 
+partial differential equation. The norm of these residuals, together with norms of residuals for 
+initial and boundary conditions, are part of the loss functions. The loss function, which uses only
+the physics-based information is defined  by 
+\begin{equation}\label{eq:fct_phys}
+\mathcal{L}(\theta, \nu ) = \mathcal{L}_{\mathrm{PDE}}  + \underbrace{\mathcal{L}_{\Gamma_1} + \ldots  + \mathcal{L}_{\Gamma_n}}_{= \mathcal{L}_{\mathrm{IC}}}  + \underbrace{\mathcal{L}_{\Theta_1} +\ldots + \mathcal{L}_{\Theta_m}}_{= \mathcal{L}_{\mathrm{BC}} } +  \mathcal{L}_{\mathrm{data}},
+\end{equation}
+with \textcolor{red}{Is it correct that $\mathcal{L}_{\mathrm{data}}$ belongs 
+to this functional? Shouldn't it appear only in the hybrid NN?}
+\[
+\mathcal{L}_{\mathrm{PDE}} = \frac{1}{|\tilde{\Omega}|} \sum_{x,t \in \tilde{\Omega}} \| \mathcal{E}\|^2_0, \quad
+\mathcal{L}_{\mathrm{IC}} = \frac{1}{|\tilde{\Theta}|} \sum_{t \in \Theta_i} \| \mathcal{I}\|^2_0, \quad  
+\mathcal{L}_{\mathrm{BC}}  = \frac{1}{|\tilde{\Gamma}|} \sum_{t \in \Gamma_i} \| \mathcal{B}\|^2_0.
+\]
+\textcolor{red}{There are a number of undefined symbols included. Do we need them?}
+The training process solves the following optimization problem 
+\[
+\mbox{argmin}_\theta \mathcal{L} (\theta, \nu \ | \ (x,t ,y)).
+\]
+
+%In this way, a neural network is created in the first step of training, using $(x,t)$ as input
+%and with output $\tilde{u}$. 
+PINNs use the gradient layer and take the whole data driven network as an input, so that the result of the 
+gradient layer provides derivatives of the approximation to the solution
+of the partial differential equation predicted by the network. 
+
+
+\begin{example}[Wave equation] 
+The following loss function shall enforce the network to compute an approximation $\hat{u}(x,t) =  U(x,t, \theta)$ 
+of the solution $u(x,t)$ of the initial-boundary value problem for the wave equation 
+\eqref{eq:wave}, \eqref{eq:wave_cond}:
+\begin{eqnarray*}
+\mathcal{L} &=& \underbrace{ \frac{1}{|\Omega |}  \sum_{(x,t) \in \Omega}
+\left\| \frac{\partial^2 U(x,t, \theta)}{\partial t^2} - c^2 \frac{\partial^2 U(x, t, \theta)}{\partial x^2}\right\|_0^2}_{\mathcal{L}_{\mathrm{PDE}}} 
++ \underbrace{\frac{1}{|\tau_1|}  \sum_{(x,t) \in \tau_1} \left\| U(x_0, t, \theta) \right\|_0^2}_{\mathcal{L}_{\tau_1}} + \underbrace{\frac{1}{|\tau_2|}  \sum_{(t, x) \in \tau_2} \| u(x_{\mathrm{end}},t, \theta) \|_0^2}_{\mathcal{L}_{\tau_2}} \\
+&&+ \underbrace{\frac{1}{|\gamma_1|}  \sum_{x \in \gamma_1} \| U(x, 0, \theta) - u_{\mathrm{in}}(x) \|_0^2}_{\mathcal{L}_{\gamma_1}} + \underbrace{\frac{1}{|\gamma_2|}  \sum_{x \in \gamma_2} \left\| \frac{\partial U(x, 0, \theta)}{\partial t} - u^{\prime}_{\mathrm{in}}(x) \right\|_0^2}_{\mathcal{L}_{\gamma_2}}.
+\end{eqnarray*}
+\textcolor{red}{This is not clear. 
+\begin{itemize}
+\item Do we take the $L^2$ norm in the space time domain? Then we do not need to sum anything. 
+\item Do we take the $L^2$ norm only in space? Then we have to sum over the time steps.
+\item Or do we use an $l^2$ norm for the vector? Then we need to sum. A number of symbols have to be 
+introduced.
+\end{itemize}
+Such notations like $(x,t) \in \Omega$ are wrong. 
+}
+\end{example}
+
+\subsection{Neural networks and optimization of hyperparameters}
+
+The effects of using different architectures of the neural networks with respect to the number of layers 
+and nodes per layer were investigated in preliminary studies. We found that the impact of these parameters 
+on the aspect we are most interested in, namely the predictions for unseen situations, was only weak. 
+For the sake of brevity, we will present results only for a network with $6$ deep (dense) layers containing $[128, 64, 32, 32, 64, 128]$ nodes, respectively. This is the ame configuration that was used in 
+\cite{??}. \textcolor{red}{you said that there is some other paper which uses the same network}
+
+Our preliminary studies also showed that the choice of the activation function might considerably influence the 
+quality of the predictions from the neural networks. In Section~\ref{sec:results}, results obtained 
+with different activation functions will be presented: $\tanh(x)$, 
+\textcolor{red}{at least two more activation functions}
+
+The library \textsc{TensorFlow} \cite{tensorflow2015-whitepaper} was used for constructing the neural networks and for solving the optimization problems. 
+The optimization problems were solved with the 
+limited-memory BFGS (L-BFGS) alogrithm  \cite{NW06}. This popular method is a  quasi  Newton method, which approximates the 
+Hessian on the basis of  a prescribed maximal number of previous iterates.
+\textcolor{red}{number of vectors used in the numerical simulations, initial value for optimization}
+

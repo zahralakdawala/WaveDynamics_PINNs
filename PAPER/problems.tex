@@ -1,0 +1,71 @@
+\section{The considered initial-boundary value problems}
+
+An $n$-th order partial differential equations, along with its initial and boundary conditions, can be written in a parameterized form: 
+\[
+\begin{array}{rcll}
+\displaystyle \mathcal{PDE}\left(u, \frac{\partial u}{ \partial t}, \frac{\partial u}{ \partial x}, \frac{{\partial}^2 u}{\partial x^2}, \ldots, \nu\right) &=&0 & \mbox{for } x \in \Omega, t \in (0,T],\\[1em]
+\displaystyle \mathcal{IC}\left(u, \frac{\partial u}{ \partial t}, \frac{\partial^2 u}{ \partial t^2}, \ldots\right) &=& 0
+& \mbox{for } t = 0, \\[1em]
+\displaystyle \mathcal{BC}\left(u, \frac{\partial u}{ \partial x}, \frac{\partial^2 u}{ \partial x^2}, \ldots   \right) &=&0  & \mbox{for } x \in \Gamma, t \in (0,T],\\[1em]
+\end{array}
+\]
+where $\Omega$ and $\Gamma$ denote the spatial domain and its boundary, respectively. 
+Here, $\mathcal{PDE}$ describes the differential operators and $\nu = (\nu_1, \nu_2, \ldots)$ 
+denotes the parameters of the partial differential equation. The solution of the initial-boundary value 
+problem with initial conditions $\mathcal{IC}$ and boundary conditions $\mathcal{BC}$ 
+is denoted by $u(x, t)$.
+
+We focus on two models that describe wave dynamics. Waves are very important in the field of fluid dynamics,
+acoustics, and many other physical problems as they are an effective way to transmit information (sound, fluid, etc.) across several spatio-temporal scales. 
+Our focus is mainly on hydrological applications, however the results can be informative for anyone studying wave dynamics.
+We consider in our investigations the  1D acoustic wave and shallow water equation. 
+ 
+\subsection{Wave equation}
+
+A wave equation, modeling the propagation of a wave at a fixed speed is defined as:
+\begin{equation}
+\label{eq:wave}
+\frac{\partial^2u}{\partial t^2} = c^2 \frac{\partial^2u}{\partial x^2},\quad \mbox{where } x \in [x_0, x_{\mathrm{end}}], t \in (0, t_{\mathrm{end}}].
+\end{equation}
+Here, $u(x, t)$ is the displacement in the second space dimension ($y$-direction) and $c$ is the velocity of wave. The equation is equipped the initial and boundary conditions
+\begin{equation}\label{eq:wave_cond}
+u_0 = u(x,0) = u_{\mathrm{in}}(x), \quad
+\left.\frac{\partial u(x, t)}{\partial t} \right|_{t=0} = u^{\prime}_{\mathrm{in}}(x), \quad 
+u(x_0, t) = u(x_{\mathrm{end}}, t). 
+\end{equation}
+
+\subsection{Shallow water equation}
+
+Shallow water equations (SWE) are a set of equations that are derived from physical conservation laws for mass and momentum to describe fluid flow problems. They can be derived by depth averaging 
+the Navier--Stokes equations. They are used in predicting cyclones, storm surges, flows around structures etc..
+
+For simplicity, the 1D SWE is used in our study of deep learning techniques. 
+This equation is derived from the 2D equations of mass and momentum conservation based on assumption
+of incompressibility of water, hydrostatic pressure distribution, and a sufficiently small channel slope. 
+The conservative form of 2D SWE takes the following form   
+\[
+\frac{\partial}{\partial t}Q + \frac{\partial }{\partial t} F(Q) + \frac{\partial }{\partial t} G(Q) = 0,
+\]
+where $u$ and $v$ are the depth-averaged water velocity in $x$ and $y$ directions, $h$ is the water height 
+with respect to a bottom profiled domain as a zero line, and 
+$Q = (h, hu, hv)^T$, $F(Q) = (hu, hu^2+ \frac{1}{2}gh^2, huv)^T$, $G(Q) =(hu, huv, hu^2+ \frac{1}{2}gh^2)^T$.
+This equation has to be equipped with appropriate initial and boundary conditions. 
+
+
+The 1D SWE, after having differentiated the terms using the product rule, is written as
+\begin{equation}\label{eq:swe}
+\begin{array}{rcll}
+\displaystyle\frac{\partial h }{\partial t} + u \frac{\partial h }{\partial x} + h \frac{\partial u }{\partial x}  &=& 0
+& \mbox{with } x \in [x_0, x_{\mathrm{end}}], t \in (0, t_{\mathrm{end}}],\\[1em]
+\displaystyle  h \frac{\partial u }{\partial t} + u \frac{\partial h }{\partial t}  + u^2 \frac{\partial h }{\partial x} + 2uh\frac{\partial u }{\partial x} + g \frac{\partial h }{\partial x} &=& 0 & \mbox{with } x \in [x_0, x_{\mathrm{end}}], t \in (0, t_{\mathrm{end}}],\\[1em]
+\end{array}
+\end{equation}
+where $h$ is the water depth and $u$ is depth-averaged velocity. Hence, in contrast to the wave equation, 
+the solution of the 1D SWE is vector-valued. The initial  and boundary 
+conditions are given by 
+\begin{equation}\label{eq:swe_ic_bc}
+u_0 =  u(x,0), \quad  h_0 = h(x,0),\quad 
+u(x_0,t) = u_t^{x_0}, \quad u(x_{\mathrm{end}}, t) = u_t^{x_{\mathrm{end}}}. 
+\end{equation}
+\textcolor{red}{What means $u_t$? In the former version there was also an initial condition for 
+$\partial_tu$ and $\partial_th$, but there is no second order time derivative.}

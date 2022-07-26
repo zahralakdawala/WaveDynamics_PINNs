@@ -1,0 +1,94 @@
+\documentclass[AMA,STIX1COL]{WileyNJD-v2}
+\usepackage{subcaption}
+\usepackage{amsmath,amssymb,color}
+\usepackage{graphicx}
+\usepackage{lineno,etoolbox}
+\newcommand{\linenomathpatch}[1]{%
+  \cspreto{#1}{\linenomath}%
+  \cspreto{#1*}{\linenomath}%
+  \csappto{end#1}{\endlinenomath}%
+  \csappto{end#1*}{\endlinenomath}%
+}
+\linenomathpatch{equation}
+\linenomathpatch{gather}
+\linenomathpatch{multline}
+\linenomathpatch{align}
+\linenomathpatch{alignat}
+\linenomathpatch{flalign}
+\newtheorem{example}[theorem]{Example}
+
+\articletype{Research Paper}%
+
+\received{\today}
+\revised{}
+\accepted{}
+\linenumbers
+
+
+\raggedbottom
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{On Water Wave Dynamics Using Physics Informed Neural Networks} 
+
+\author[1]{Waasif Nadeem}
+
+\author[2,3]{Volker John}
+
+\author[1]{Zahra Lakdawala}
+
+\authormark{AUTHOR ONE \textsc{et al}}
+
+
+\address[1]{\orgdiv{Lahore University of Management Sciences}, \orgname{Department of Mathematics, School of Science and Engineering}, \orgaddress{\state{Lahore}, \country{Pakistan}}}
+
+\address[2]{\orgdiv{Weierstrass Institute for Applied Analysis and Stochastics}, \orgname{Leibniz Institute in Forschungsverbund Berlin e. V. (WIAS)}, \orgaddress{\state{Berlin}, \country{Germany}}}
+
+\address[3]{\orgdiv{Freie Universit\"at of Berlin}, \orgname{Department of Mathematics and Computer Science}, \orgaddress{\state{Berlin}, \country{Germany}}}
+
+\corres{Zahra Lakdawala. \email{zahralakda@gmail.com}}
+
+%\presentaddress{This is sample for present address text this is sample for present address text}
+
+\abstract[Summary]{A vanilla feed forward neural network consists of neurons and layers and the mapping between input and output is approximated using a non linear function. The network is conventionally trained using data. In this work, we set up a neural network such that the spatio-temporal solution of time-dependent wave propogation models is learnt. This is done by providing the physical model, such as the 1D wave and shallow water wave equations and its associated boundary and initial conditions, as rules for learning the network. We invesitage the feasibility of data-driven and model-driven network predictions against numerical solutions. We  further investigate the accuracy of the trained network through different parameter configurations and look closely into the multi-objective loss function that is constructed by including the residual error of the physical equations and the associated initial and boundary conditions. We present the results of numerical solutions against solutions obtained from data and model-driven neural network using data and physics informed rules for learning. Lastly, we construct a hybrid data and physics driven network and show that this significantly improves the accuracy of the physics-driven network.}
+
+\keywords{Physics informed neural networks, wave equation, data trained network, model-based learning, neural network}
+
+
+
+\maketitle
+
+\input{intro.tex}
+\input{problems.tex}
+\input{neural_networks.tex}
+\input{results.tex}
+\input{conclusions.tex}
+
+\section*{Conflict of Interest Statement}
+%All financial, commercial or other relationships that might be perceived by the academic community as representing a potential conflict of interest must be disclosed. If no such relationship exists, authors will be asked to confirm the following statement: 
+
+The authors declare that the research was conducted in the absence of any commercial or financial relationships that could be construed as a potential conflict of interest.
+
+\section*{Author Contributions}
+ZL developed the code base for physics informed deep learning neural networks and put the article together. WN trained, and evaluated the models. VJ reviewed and refined the results. All authors contributed to the article and approved the submitted version.
+\section*{Funding}
+We acknowledge support from the DAAD through grant awards. We thank DAAD for their support.
+
+\section*{Acknowledgments}
+We thank Prof. Muhammad Abubakr and Prof. Karsten Berns for helpful discussions at the early stage of this work.
+
+\section*{Supplemental Data}
+ \href{http://home.frontiersin.org/about/author-guidelines#SupplementaryMaterial}{Supplementary Material} should be uploaded separately on submission, if there are Supplementary Figures, please include the caption in the same file as the figure. LaTeX Supplementary Material templates can be found in the Frontiers LaTeX folder.
+
+\section*{Data Availability Statement}
+The datasets [GENERATED/ANALYZED] for this study can be found in the [NAME OF REPOSITORY] [LINK].
+% Please see the availability of data guidelines for more information, at https://www.frontiersin.org/about/author-guidelines#AvailabilityofData
+
+
+%\bibliographystyle{plain}
+\bibliography{pinns_for_pdes}
+
+
+
+\end{document}
