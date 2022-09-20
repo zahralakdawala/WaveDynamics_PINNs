@@ -1,51 +1,32 @@
 \section{Data driven and physics informed neural networks}
 \label{sec:neuralnets}
+This section reviews a data driven neural network(DDNN) and physics informed neural network(PINN) in the context of seeking solutions for the acoustic and shallow water wave equations \ref{eq:wave}-\ref{eq:swe}. Only a few studies have discussed a hybrid neural network (HNN) that combines data-driven and phyics informed neural networks. We introduce the hybrid approach for the wave equations and discuss the composition of loss function in each of the approaches in detail.
 
-\subsection{A data-driven neural network}
+\subsection{A data-driven neural network (DDNN)}
 \label{sec:vanillaNN}
-
-\textcolor{red}{should we use the abbreviation DDNN for data-driven neural network?}
-Neural networks can generally be described by three components, namely neurons, layers and a global
-architecture. Each neuron of a layer is connected to each neuron of the next layer and is associated with a 
-weight, a bias term, and an activation function $\sigma$. If the weight $w_{jk}^l$ connects the $k$-th 
-neuron in the ($l-1$)th layer to the $j$-th neuron in the $l$-th layer, the relationship for the output 
-$u_j^l$ can be written as
+A simple forward feed convolutional neural network, denoted by $U(x, t, u^*); \theta)$, can generally be described by three components, namely  multiple layers consisting of neurons and a global architecture. If the weight $w_{jk}^l$ connects the $k$-th neuron in the ($l-1$)th layer to the $j$-th neuron in the $l$-th layer, the relationship for the output $\tilde{u}_j^l$ can be written as
 \[
-u_j^l = \sigma\left(\sum_k w^l_{jk} u_k ^{l-1} + b_j^l\right) =  \sigma\left(z_j^l\right).
-\] 
-%The activation function $\sigma$ is usually chosen keeping the following issues in mind: explosion or vanishing gradients, making clear predictions, and computational efficiency.
-The choice of the activation function will be one aspect in our studies. 
-
-The feed forward network uses the principle of back propogation to address how a variation in weight and biases impact the output error.  The sample signal is applied by an activation function before it is
-passed to the next layer. For example, a sample input $x$ with a sigmoid activation function sees a transformation of $f(x) = \frac{1}{1+e^{-x}}$ when it meets the next layer. 
-
-A neural network further needs a routine to update its weights and biases in the direction of minimizing a loss function defined on the output. This routine 
-is generally a (stochastic) gradient descent algorithm or a quasi Newton method. In a supervised regression problem, the output loss is often the mean squared error (MSE) computed using the difference of the actual output value and the desired target value $y(x,t)$:
-\begin{equation}\label{eq:fct_data}
-\mathcal{L}_{\mathrm{data}}= \frac{1}{N} \sum_{x,t} \left\| y(x,t) - \hat{u}^L(x,t) \right\|_2^2,
-\end{equation}
-where $L$ is the number of layers and $N$ is the number of uniformly sampled collocation points defined 
-as the data set $\{ x_i,t_i \}, i \in \{1, \ldots, N\{$.  The output $\hat{u} = f (x, t, \theta)$ is
-expressed as a function of the input $(x, t)$ and network parameters $\theta$ (weights and biases).
-The training process aims to find $\theta$, given the input $(x, t)$, by solving the following optimization problem 
-\[
-\mbox{argmin}_\theta \mathcal{L} \left(\theta\ | \ (x,t ,y)\right),
+\tilde{u}_j^l = \sigma\left(\sum_k w^l_{jk} \tilde{u}_k ^{l-1} + b_j^l\right) =  \sigma\left(z_j^l\right).
 \]
-where the function $y$ maps $(x, t)$ to measurements/true solution at those coordinates.
-The training is complete once the network has found parameters such that a 
-desired accuracy of the loss function is reached.
-The function that is learnt is a function that is based just on the input data at $(x,t)$. 
+Each neuron of a layer is connected to each neuron of the next layer and is associated with a weight, a bias term, and an activation function. The  activation function is applied to a signal at evey layer before it is passed to the next layer. For example, a sample input $x$ with a sigmoid activation function sees a transformation of $\sigma(x) = \frac{1}{1+e^{-x}}$ when it meets the next layer. The choice of the activation function will be one aspect in our studies. The choice is usually determined by certain factors such as explosion or vanishing gradients, making clear predictions, and/or computational efficiency.
+%
+The feed forward network uses the principle of back propogation to address how a variation in weight and biases impact the output error. Simply put,the network parameters $\theta$ (weights and biases) are found using an optimization routine such that the resulting output is close to the desired target solution. Here is where a loss function forms the crux of the training of the network. In a supervised regression problem, the output loss is often the mean squared error (MSE) computed using the difference of the actual output value and the desired target value $u(x,t)$:
+\begin{equation}\label{eq:fct_data}
+\mathcal{L}_{\mathrm{data}}= \frac{1}{N} \sum_i^N \left\| u(x_i,t_i) - \tilde{u}(x_i,t_i) \right\|_2^2,
+\end{equation}
+where  $N$ is the number of uniformly sampled collocation points defined 
+as the data set $\{ x_i,t_i \}, i \in \{1, \ldots, N\}$.  The output $\tilde{u} = \tilde{u} (x, t, \theta)$ is
+expressed as a function of the input $(x, t)$ and the network parameters $\theta$. The training process aims to find $\theta$, given the input $(x, t, u^*)$, by solving the following optimization problem 
+\[
+\mbox{argmin}_\theta \mathcal{L} \left(\theta\ | \ (x,t ,u^*)\right),
+\]
+where the function $u$ maps $(x, t)$ to measurements/true solution at those coordinates. A neural network needs an optimization routine to update its weights and biases in the direction of minimizing a loss function defined on the output. This routine is generally a (stochastic) gradient descent algorithm or a quasi Newton method.  The training is complete once the network has found parameters such that a desired accuracy of the loss function is reached. The learnt function is based just on the training input data $u^*$ and $(x,t)$. We will talk about the training data in detail later in Section \ref{sec:hnn}. 
 
 \subsection{Physics informed training of the neural network}
 \label{sec:pinns}
 
-If one is interested in finding the solution of an initial-boundary value problem, then it seems to be 
-a quite natural idea to incorporate this problem into the loss function, i.e., the physics instead of only data. The problem statement for predicting fluid flows models the physics in 
-form of partial differential equations that is defined on a domain, along with some boundary conditions on the boundaries and some initial conditions. To incorporate such physics into the training step of the neural network, the  parameterized form of the problem is considered. Let us denote the neural network by   
-$U(x, t, \theta )$ and the function to be learnt by $\hat{u}(x,t)$, where learning is based on minimizing  a multi-objective loss functional
-\[
-\mathcal{L} (\theta, \nu)  = \sum_{i=1}^k \mathcal{L}_i ( \theta , \nu).
-\]
+If one is interested in finding the solution of an initial-boundary value problem, then it seems to be a quite natural idea to incorporate this problem into the loss function, i.e. the physics instead of data. The physical model comprises of differential equations,along with its boundary and/or initial conditions. The problem is defined on a spatial and/or temporal domain. The  parameterized form of the problem is considered, as shown in equations \ref{eq:pde} -  \ref{eq:bc}. Let us denote the neural network by   
+$U(x, t, \theta )$ and the function learnt by the network is the solution to the physics model, denoted by $\tilde{u}(x,t)$. 
 In PINNs,  the residuals of the partial differential equation, initial, and boundary conditions are included, 
 where we used the $L^2$-norm $\|\cdot\|_0$  (mean squared error / MSE) on uniformly sampled collocation points prior to training,    
 
@@ -54,7 +35,7 @@ partial differential equation. The norm of these residuals, together with norms 
 initial and boundary conditions, are part of the loss functions. The loss function, which uses only
 the physics-based information is defined  by 
 \begin{equation}\label{eq:fct_phys}
-\mathcal{L}(\theta, \nu ) = \mathcal{L}_{\mathrm{PDE}}  + \underbrace{\mathcal{L}_{\Gamma_1} + \ldots  + \mathcal{L}_{\Gamma_n}}_{= \mathcal{L}_{\mathrm{IC}}}  + \underbrace{\mathcal{L}_{\Theta_1} +\ldots + \mathcal{L}_{\Theta_m}}_{= \mathcal{L}_{\mathrm{BC}} } +  \mathcal{L}_{\mathrm{data}},
+\mathcal{L}(\theta, \nu ) = \mathcal{L}_{\mathrm{PDE}}  + \underbrace{\mathcal{L}_{\bar{\Omega}_1} + \ldots  + \mathcal{L}_{\bar{\Omega}_n}}_{= \mathcal{L}_{\mathrm{IC}}}  + \underbrace{\mathcal{L}_{\Theta_1} +\ldots + \mathcal{L}_{\Theta_m}}_{= \mathcal{L}_{\mathrm{BC}} },
 \end{equation}
 with \textcolor{red}{Is it correct that $\mathcal{L}_{\mathrm{data}}$ belongs 
 to this functional? Shouldn't it appear only in the hybrid NN?}
@@ -64,9 +45,10 @@ to this functional? Shouldn't it appear only in the hybrid NN?}
 \mathcal{L}_{\mathrm{BC}}  = \frac{1}{|\tilde{\Gamma}|} \sum_{t \in \Gamma_i} \| \mathcal{B}\|^2_0.
 \]
 \textcolor{red}{There are a number of undefined symbols included. Do we need them?}
+DDNN used a single objective loss function,whereas  PINNs find the training parameters by minimizing a multi-objective loss functional $\mathcal{L} (\theta, \nu)  = \sum_{i=1}^k \mathcal{L}_i ( \theta , \nu)$.
 The training process solves the following optimization problem 
 \[
-\mbox{argmin}_\theta \mathcal{L} (\theta, \nu \ | \ (x,t ,y)).
+\mbox{argmin}_\theta \mathcal{L} (\theta, \nu \ | \ (x,t ,physics)).
 \]
 
 %In this way, a neural network is created in the first step of training, using $(x,t)$ as input
@@ -96,6 +78,8 @@ introduced.
 Such notations like $(x,t) \in \Omega$ are wrong. 
 }
 \end{example}
+\subsection{Hybrid Neural neutwork}
+\label{sec:hnn}
 
 \subsection{Neural networks and optimization of hyperparameters}
 
