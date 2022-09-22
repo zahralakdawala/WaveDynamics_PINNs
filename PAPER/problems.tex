@@ -1,24 +1,7 @@
 \section{The considered initial-boundary value problems}
-
-An $n$-th order partial differential equations, along with its initial and boundary conditions, can be written in a parameterized form: 
-\[
-\begin{array}{rcll}
-\displaystyle \mathcal{PDE}\left(u, \frac{\partial u}{ \partial t}, \frac{\partial u}{ \partial x}, \frac{{\partial}^2 u}{\partial x^2}, \ldots, \nu\right) &=&0 & \mbox{for } x \in \Omega, t \in (0,T],\\[1em]
-\displaystyle \mathcal{IC}\left(u, \frac{\partial u}{ \partial t}, \frac{\partial^2 u}{ \partial t^2}, \ldots\right) &=& 0
-& \mbox{for } t = 0, \\[1em]
-\displaystyle \mathcal{BC}\left(u, \frac{\partial u}{ \partial x}, \frac{\partial^2 u}{ \partial x^2}, \ldots   \right) &=&0  & \mbox{for } x \in \Gamma, t \in (0,T],\\[1em]
-\end{array}
-\]
-where $\Omega$ and $\Gamma$ denote the spatial domain and its boundary, respectively. 
-Here, $\mathcal{PDE}$ describes the differential operators and $\nu = (\nu_1, \nu_2, \ldots)$ 
-denotes the parameters of the partial differential equation. The solution of the initial-boundary value 
-problem with initial conditions $\mathcal{IC}$ and boundary conditions $\mathcal{BC}$ 
-is denoted by $u(x, t)$.
-
-We focus on two models that describe wave dynamics. Waves are very important in the field of fluid dynamics,
+Waves are very important in the field of fluid dynamics,
 acoustics, and many other physical problems as they are an effective way to transmit information (sound, fluid, etc.) across several spatio-temporal scales. 
-Our focus is mainly on hydrological applications, however the results can be informative for anyone studying wave dynamics.
-We consider in our investigations the  1D acoustic wave and shallow water equation. 
+Our focus is mainly on hydrological applications, however the results can be informative for anyone studying wave dynamics. We focus on two models that describe wave dynamics, namely the 1D acoustic wave and shallow water equations. 
  
 \subsection{Wave equation}
 
@@ -28,7 +11,8 @@ A wave equation, modeling the propagation of a wave at a fixed speed is defined 
 \frac{\partial^2u}{\partial t^2} = c^2 \frac{\partial^2u}{\partial x^2},\quad \mbox{where } x \in [x_0, x_{\mathrm{end}}], t \in (0, t_{\mathrm{end}}].
 \end{equation}
 Here, $u(x, t)$ is the displacement in the second space dimension ($y$-direction) and $c$ is the velocity of wave. The equation is equipped the initial and boundary conditions
-\begin{equation}\label{eq:wave_cond}
+\begin{equation}
+\label{eq:wave_cond}
 u_0 = u(x,0) = u_{\mathrm{in}}(x), \quad
 \left.\frac{\partial u(x, t)}{\partial t} \right|_{t=0} = u^{\prime}_{\mathrm{in}}(x), \quad 
 u(x_0, t) = u(x_{\mathrm{end}}, t). 
@@ -65,7 +49,19 @@ the solution of the 1D SWE is vector-valued. The initial  and boundary
 conditions are given by 
 \begin{equation}\label{eq:swe_ic_bc}
 u_0 =  u(x,0), \quad  h_0 = h(x,0),\quad 
-u(x_0,t) = u_t^{x_0}, \quad u(x_{\mathrm{end}}, t) = u_t^{x_{\mathrm{end}}}. 
+u_{x_0}=u(x_0,t), \quad  u_{x_{\mathrm{end}}} = u(x_{\mathrm{end}}, t) . 
 \end{equation}
-\textcolor{red}{What means $u_t$? In the former version there was also an initial condition for 
-$\partial_tu$ and $\partial_th$, but there is no second order time derivative.}
+
+We consider the parameterized form of the wave equations described above. A n-th order  partial differential equation along with its initial and boundary conditions can be written as: 
+\begin{eqnarray}
+  \label{eq:pde}
+ \mathcal{F}_{PDE}\left(u, \frac{\partial u}{ \partial t}, \frac{\partial u}{ \partial x}, \frac{{\partial}^2 u}{\partial x^2}, \ldots, \vec{\nu}\right) &=&0 \;  \mbox{for } x \in \Omega, t \in (0,T],\\
+\label{eq:ic}
+  \mathcal{F}_{IC}\left(u, \frac{\partial u}{ \partial t}, \frac{\partial^2 u}{ \partial t^2}, \ldots\right) &=& 0 \;
+ \mbox{for } x \in \Omega \cup \bar{\Omega}, t = 0,\\
+\label{eq:bc} \mathcal{F}_{BC}\left(u, \frac{\partial u}{ \partial x}, \frac{\partial^2 u}{ \partial x^2}, \ldots   \right) &=&0 \;  \mbox{for } x \in  \bar{\Omega}, t \in (0,T], 
+\end{eqnarray}
+where $\Omega$ and $\bar{\Omega}$ denote the spatial domain and its boundary,respectively. 
+Here, $\mathcal{F}_{PDE}$ describes the differential operators and $\vec{\nu} = (\nu_1, \nu_2, \ldots)$ 
+denotes the parameters of the partial differential equation. We seek to find the solution $u(x,t)$ of the initial-boundary value 
+problem with initial conditions and boundary conditions denoted by $\mathcal{F}_{IC}$ and $\mathcal{F}_{BC}$ respectively. 
