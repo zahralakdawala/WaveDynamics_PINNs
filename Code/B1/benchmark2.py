@@ -12,7 +12,7 @@ class benchmark:
         self.xstart = xstart
         self.xend   = xend
         self.Nx     = 100
-        self.mode   = 'data'  # 'PINNs' or 'data'
+        self.mode   = 'dataAndPhysics'  # 'PINNs' or 'data'
         
         
         self.tstart = tstart
@@ -23,7 +23,7 @@ class benchmark:
         self.num_train_samples = 100
         self.num_test_samples  = 100
         
-        self.train = False
+        self.train = True
         #False if you have a saved network, True to activate training step
 
         self.layers = [32, 32, 32, 32]
@@ -50,6 +50,10 @@ class benchmark:
             self.xtrain = [self.tx_eqn, self.tx_ini, self.tx_bnd]
         elif self.mode == 'data':
             self.xtrain = [self.tx_eqn, self.tx_bnd]
+        elif self.mode == 'dataAndPhysics':
+            self.xtrain = [self.tx_eqn, self.tx_ini, self.tx_bnd]
+        
+        
         
         #Training Output
         self.u_zero = np.zeros((self.num_train_samples, 1))
@@ -61,6 +65,10 @@ class benchmark:
         elif self.mode == 'data':
             self.u_sol = self.u0(self.tx_eqn[...,1], self.tx_eqn[...,0]).numpy()
             self.ytrain = [self.u_sol.reshape(-1, 1), self.u_zero]
+        elif self.mode == 'dataAndPhysics':
+            self.u_sol = self.u0(self.tx_eqn[...,1], self.tx_eqn[...,0]).numpy()
+            self.ytrain = [self.u_zero, self.u_sol.reshape(-1, 1), self.u_ini[:, 1].reshape(-1, 1), self.du_dt_ini, self.u_zero]
+        
   
                 
     def u0(self, x, t = 0, c=1, noise = False):

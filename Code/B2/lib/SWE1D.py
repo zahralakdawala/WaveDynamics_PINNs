@@ -135,6 +135,26 @@ def boundary_conditions ( nx, nt, h, uh, t ):
 
   return h, uh
 
+import numpy as np
+
+def damBreak(x, h1 = 1, h2 = 0.5):
+    val = []
+    step1 = 0.45
+    step2 = 0.55
+
+        
+    for i in x:
+        if i < step1:
+            val.append(h1)
+        elif i > step2:
+            val.append(h2)
+        else:
+            m = (h2-h1)/(step2-step1)
+            c = h2 - m*step2
+            val.append( m*i + c)
+            
+    return val
+
 def initial_conditions ( nx, nt, h, uh, x, benchmark):
 
 #
@@ -145,6 +165,13 @@ def initial_conditions ( nx, nt, h, uh, x, benchmark):
       h = 0.5*np.sin(np.pi*x)
   elif benchmark == 2:
       h = 2.0 + np.sin ( 2.0 * np.pi * x )
+  elif benchmark == 3:
+      h = np.array(damBreak(x))
+  elif benchmark == 4:
+      h = np.array(damBreak(x, h1 = 1, h2 = 0.1))
+  elif benchmark == 5:
+      h = np.array(damBreak(x, h1 = 1, h2 = 0.02))
+      
 
       
   uh = np.zeros ( nx )

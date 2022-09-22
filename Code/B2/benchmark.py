@@ -4,11 +4,14 @@ from matplotlib.colors import Normalize
 from matplotlib.gridspec import GridSpec
 from lib.SWE1D import *
 
+
+            
+
 class InputVariables:
     def __init__(self, num_train = 200, num_test = 200, xstart = 0, \
                  xend = 1, tstart = 0, tend = 0.15, layers = 6, \
-                 nodes = 30, train = False, mode = 'dataAndPhysics',\
-                 benchmark = 1):
+                 nodes = 30, train = False, mode = 'PINNs',\
+                 benchmark = 5):
         
         # number of training samples
         self.num_train_samples = num_train
@@ -109,7 +112,24 @@ class TrainingOutput(TrainingInput):
         elif self.mode == 'data':
             return [self.hu_sol]
     
-    
+    def damBreak(self, x, h1 = 1, h2 = 0.5):
+        val = []
+        step1 = 0.45*(self.xend - self.xstart)
+        step2 = 0.55*(self.xend - self.xstart)
+        
+            
+        for i in x:
+            if i < step1:
+                val.append(h1 + 10e-3*np.random.randn())
+            elif i > step2:
+                val.append(h2 + 10e-3*np.random.randn())
+            else:
+                m = (h2-h1)/(step2-step1)
+                c = h2 - m*step2
+                val.append( m*i + c + 10e-3*np.random.randn())
+                
+        return val
+        
     def initial_conditions (self, x, t=0):
         nx = self.num_train_samples
         h_uh = np.zeros((nx, 2))
@@ -118,6 +138,12 @@ class TrainingOutput(TrainingInput):
             h_uh[:, 0] +=  0.5*np.sin(np.pi*x) 
         elif self.benchmark == 2:
             h_uh[:, 0] += 2.0 + 0.1*np.sin ( 2.0 * np.pi * x )
+        elif self.benchmark == 3: #Weak Shock
+            h_uh[:, 0] += self.damBreak(x)
+        elif self.benchmark == 4: #Mild Shock
+            h_uh[:, 0] += self.damBreak(x, h1 = 1, h2 = 0.1)
+        elif self.benchmark == 5: #Strong shock
+            h_uh[:, 0] += self.damBreak(x, h1 = 1, h2 = 0.02)
 
 
         return h_uh

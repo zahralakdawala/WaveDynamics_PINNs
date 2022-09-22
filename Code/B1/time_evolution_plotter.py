@@ -7,8 +7,10 @@ from fdm.wave1d_matrixForm import *
 network_PINNs    = load_model('trained_networks/wave_trained_network_PINNs.h5')
 network_data_100 = load_model('trained_networks/wave_trained_network_data_100.h5')
 network_data_400 = load_model('trained_networks/wave_trained_network_data.h5')
+network_dataPhys = load_model('trained_networks/wave_trained_network_dataAndPhysics_100.h5')
 
-plot = 1
+
+plot = 2
 
 if plot == 1:
     
@@ -22,16 +24,18 @@ if plot == 1:
     u_pinns = network_PINNs.predict(tx)
     u_data  = network_data_100.predict(tx)
     u_400   = network_data_400.predict(tx)
+    u_dPhys = network_dataPhys.predict(tx)
     
-    plt.plot(T, u_pinns, label = 'PINNs')
-    plt.plot(T, u_data, label = 'data_100')
-    plt.plot(T, u_400, label = 'data_400')
-    plt.plot(T, U(0*T + X, T), label = 'reference')
+    plt.plot(T, u_pinns, label = 'PINN', color = 'blue')
+    plt.plot(T, u_data, label = 'data=driven NN', color = 'orange')
+    #plt.plot(T, u_400, label = 'data_400')
+    plt.plot(T, u_dPhys, label = 'hybrid NN', color = 'green')
+    plt.plot(T, U(0*T + X, T), label = 'reference', color = 'red')
     plt.xlabel('Time (s)')
     plt.ylabel('Velocity (m/s)')
     plt.title('Evolution of velocity at x = 0.5')
     plt.legend()
-    #plt.savefig('plots/evolution_plot.png')
+    plt.savefig('plots/evolution_plot.png')
     plt.show()
    
 if plot == 2:
@@ -56,12 +60,14 @@ if plot == 2:
         u_pinns = network_PINNs.predict(tx)
         u_data100 = network_data_100.predict(tx)
         u_data400 = network_data_400.predict(tx)
+        u_dataPhys = network_dataPhys.predict(tx)
         
         plt.ylim(-1, 1)
-        plt.plot(x_flat, u_num[:, T[i]], label = 'reference')
-        plt.plot(x_flat, u_pinns, label = 'PINNs')
-        plt.plot(x_flat, u_data100, label = 'data_100')
-        plt.plot(x_flat, u_data400, label = 'data_400')
+        plt.plot(x_flat, u_num[:, T[i]], label = 'reference', color = 'red')
+        plt.plot(x_flat, u_pinns, label = 'PINN', color = 'blue')
+        plt.plot(x_flat, u_data100, label = 'data-driven NN', color = 'orange')
+        #plt.plot(x_flat, u_data400, label = 'data_400')
+        plt.plot(x_flat, u_dataPhys, label = 'hybrid NN', color = 'green')
         plt.title('t={}'.format(round(t_cs, 3)))
         plt.xlabel('x (m)')
         plt.ylabel('u(t,x)')
@@ -101,8 +107,12 @@ if plot == 3:
            
     u_data  = network_data_400.predict(tx, batch_size=ModelInfo.num_test_samples)
     u_data  = u_data.reshape(t.shape)
+    
+    u_dPhy  = network_dataPhys.predict(tx, batch_size=ModelInfo.num_test_samples)
+    u_dPhy  = u_dPhy.reshape(t.shape)
+    
     # plot u(t,x) distribution as a color-map
-    heat_map_plot([u_num, u_data, u_pinns], ['Numerical Solution', 'Data_400 Solution', 'PINNs Solution' ], t, x, 'colormap', save = False)
+    heat_map_plot([u_num, u_data, u_pinns, u_dPhy], ['finite-difference solution', 'data-driven NN', 'PINN', 'hybrid NN' ], t, x, 'colormap', save = True)
     
     # Error Plot 
-    heat_map_plot([abs(u_pinns-u_num), abs(u_data - u_num)], ['Error PINNs', 'Error data_400'], t, x, 'error_colormap', save = False)
+    heat_map_plot([abs(u_pinns-u_num), abs(u_data - u_num), abs(u_dPhy - u_num)], ['Error PINN', 'Error data-driven NN', 'Error hybrid NN'], t, x, 'error_colormap', save = True)

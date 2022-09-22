@@ -56,8 +56,17 @@ class PINN:
     
             # equation output being zero
             u_eqn = d2u_dt2 - self.c*self.c * d2u_dx2
+            
         elif self.ModelInfo.mode == 'data':
             u_eqn = self.network(tx_eqn)
+            
+        elif self.ModelInfo.mode == 'dataAndPhysics':
+            _, _, _, d2u_dt2, d2u_dx2 = self.grads(tx_eqn)
+    
+            # equation output being zero
+            u_eqn = d2u_dt2 - self.c*self.c * d2u_dx2
+            u_sol = self.network(tx_eqn)
+            
         # initial condition output
         u_ini, du_dt_ini, _, _, _ = self.grads(tx_ini)
         # boundary condition output
@@ -73,3 +82,8 @@ class PINN:
             return tf.keras.models.Model(
                 inputs=[tx_eqn, tx_bnd],
                 outputs=[u_eqn, u_bnd])
+        elif self.ModelInfo.mode == 'dataAndPhysics':
+            return tf.keras.models.Model(
+                inputs=[tx_eqn, tx_ini, tx_bnd],
+                outputs=[u_eqn, u_sol, u_ini, du_dt_ini, u_bnd])
+        
