@@ -1,5 +1,12 @@
 \section{Conclusion}
 \label{sec:conclusion}
+First, the convergence of the 
+optimization process was studied, where we explored which terms of the multi-objective 
+loss functional were easily or hard to minimize. Then, of course, the quality of the solution 
+predicted by the networks was studied. On the one hand, we considered exactly the interval were the 
+data came from. And on the other hand, we exploreed what happens if a somewhat larger time 
+interval is considered, i.e., the predictions of the network were applied to an unseen situation. 
+
 Cant colnclude that PINNS works best for SWE. changing layer and node configuration hardly makes a difference in training the networks. In the case of smooth solutions of wave models, PINNs predicts velocity(density) and/or height rather accurately. However for more complex/coupled systems, data-driven networks seem to work better. However data-fed networks need exhaustive datasets (solutions of model equations). In the absence of exhaustive data for learning of complex solutions, a hybrid training is recommended. 
 
 

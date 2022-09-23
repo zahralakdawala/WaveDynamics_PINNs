@@ -1,0 +1,22 @@
+\begin{thebibliography}{1}
+
+\bibitem{tensorflow2015-whitepaper}
+Abadi Mart\'{i}n, Agarwal Ashish, Barham Paul, et al. {\it {TensorFlow}:
+  Large-Scale Machine Learning on Heterogeneous Systems. } Software available
+  from tensorflow.org; 2015.
+
+\bibitem{NW06}
+Nocedal Jorge, Wright Stephen~J.. {\it Numerical optimization}.
+\newblock Springer Series in Operations Research and Financial
+  EngineeringSpringer, New York; second~ed.2006.
+
+\bibitem{LW60}
+Lax Peter, Wendroff Burton. Systems of conservation laws.  {\it Comm. Pure
+  Appl. Math.. }1960;13:217--237.
+
+\bibitem{LeV92}
+LeVeque Randall~J.. {\it Numerical methods for conservation laws}.
+\newblock Lectures in Mathematics ETH Z\"{u}richBirkh\"{a}user Verlag, Basel;
+  second~ed.1992.
+
+\end{thebibliography}

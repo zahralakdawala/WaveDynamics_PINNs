@@ -1,24 +1,11 @@
 \section{Results}
 \label{sec:results}
-
-Numerical solutions for the considered initial-boundary value problems were computed with a finite 
-difference method in space and \textcolor{red}{temporal discretization}. 
-For the wave equation, the Lax--Wendroff scheme \cite{LW60,LeV92} was utilized. These solutions were 
-used to train the data-driven neural network. 
-
-We have investigated several aspects of the numerical simulations. First, the convergence of the 
-optimization process was studied, where we explored which terms of the multi-objective 
-loss functional were easily or hard to minimize. Then, of course, the quality of the solution 
-predicted by the networks was studied. On the one hand, we considered exactly the interval were the 
-data came from. And on the other hand, we exploreed what happens if a somewhat larger time 
-interval is considered, i.e., the predictions of the network were applied to an unseen situation. 
-We studied also the impact of using different activation functions. For the sake of brevity, only 
-selected and representative results will be presented. 
-
+We have considered one test case for the wave equation \ref{eq:wave} with a known solution, and two test cases for shallow water equation \ref{eq:swe} to investigate the results from three neural networks described in section \ref{sec:neuralnets} . We investigated several aspects: 1) the  forward problems and accuracy of solutions learnt from each of the neural network with respect to analytical/reference solutions of the pdes; 2) the convergence of the optimizater with respect to the multiobjective loss function; 3)  we provide a few insights on whether neural netwrks can be a reliable long term prediction algorithm based on limited training data. 
+\par
+We studied the impact of different layered architectures of the neural netwrok ranging from 6 to 24 hidden layers, with different configurations of nodes in every layer ranging from 8 to 64 nodes. Increasing the number of hidden layers and the node confugrations seemed to have almost no impact on the quality of solutions. We also studied the the impact of using different activation functions, and only tanh activation function seemed to work for the three cases. For the sake of brevity, only selected and representative results are included. 
 
 \subsection{Wave equation}
 \label{subsec:wave_res}
-
 We consider equation \eqref{eq:wave} for $x \in [0,1]$, $t \in [0,1]$, and $c =1$.  A solution of this 
 equation is given by 
 \[
@@ -27,17 +14,15 @@ u(x,t) = \frac{1}{2} \sin (\pi x) \cos(\pi t) + \frac{1}{3} \sin (3\pi x) \sin (
 This function is for the boundary conditions a $u(0,t) = u(1,t) =  0$ and the initial 
 conditions 
 \[
-u_0  = u(x,0)  = \frac{1}{2} \sin (\pi x), \quad \frac{\partial u}{\partial t}(x,0) = \pi  \sin (3 \pi x)
+u_0  = u(x,0)  = \frac{1}{2} \sin (\pi x), \quad u_0^{\prime}=\frac{\partial u}{\partial t}(x,0) = \pi  \sin (3 \pi x)
 \]
 the solution of the initial-boundary value problem \eqref{eq:wave} -- \eqref{eq:wave_cond}.
 
-
-The finite difference solution was obtained with $\Delta t = \Delta x = 0.0025$, i.e., with $400$ 
-discrete steps both in time and space. The training of the data-driven network was performed only 
-in the time interval $[0,0.8]$. The numerical solution at every timestep was used. Likewise, 
-the PINNs was also trained for $t \in (0,0.8)$. The application of the trained networks to an 
-unseen situation consists in predicting the solution in $[0.8,1]$. 
-
+We use the numerical solution using a finite difference method. The training for PINNS , DDNN and HNN uses 100 $(x,t)$ tuples of uniformly sampled points on the grid for $ x\in (0,1)$ and $t \in (0,0.8]$,  another 100 $(x,t)$ tuples on the boundary $x =0$, $x=1$ and another 100 tuples each for the initial conditions $u_0$ and $u_0^{\prime}$ . DDNN further uses the tuple $(x,t, u(x,t))$ including the solution of the PDE evaluated at the sampled grid points as part of training data. PINN further includes the PDE evaluation of $u$ on 100 $(x,t)$  tuples (in the domain interior) as part of the loss functional. The gradient terms in the PDS are evaluated using automatic differentiation in TensorFlow.  HNN training was done using $100$ randomly selected tuples of $(x, t, u(x,t))$  and PDE evaluation of $u$ as part of the loss functional .The configuration for all the three networks consisted of 4 layers with 32 nodes in each layer using $tanh$ activation function.
+\par
+The formulation of loss functionals are different for each of the networks, as described in Section~\ref{sec:neuralnets}. Figure~\ref{fig:wave_loss_contributions} illustrates how the each of the residual terms in \eqref{eq:loss} is minimized in the multi-objective optimization routine. Moreover, we see that the convergence and estimation of hyperparameters requires around . However, the performance for PINN  in this case is quite satisfactory given no pre-computed solutions are required to train the network.   
+\textcolor{red}{the pictures need more explanations. I do not understand that the overall loss 
+is smaller than the largest individual loss.}
 \begin{figure}[t!]
 \begin{center}
 \includegraphics[width=0.45\linewidth]{../Code/B1/losses/combined_losses_reduction_data.png}
@@ -48,26 +33,16 @@ for minimizing the loss functionals and their individual terms. Note the differe
 abscissa.}\label{fig:wave_loss_contributions}
 \end{figure}
 
-First, results for the activation function $\tanh(x)$ will be presented and discussed. 
-As already explained in Section~\ref{sec:neuralnets}, the formulation of the loss functional is 
-different for both networks. Figure~\ref{fig:wave_loss_contributions} illustrates how the each of the 
-residual term in \eqref{eq:loss} is minimized in the multi-objective optimization. Moreover, we see 
-that the estimation of hyperparameters requires less iterations using 
-the data-driven network. However, the performance for the PINN is quite also satisfactory given 
-no pre-computed solutions are required to train the network.   
-\textcolor{red}{the pictures need more explanations. I do not understand that the overall loss 
-is smaller than the largest individual loss.}
+
+The hyperparameters were used to predict solutions for $t \in [0,0.8]$ to see if solution was correctly learnt using the training data. We also used the same network to predict the solution for $t \in [0.8,1.0]$.
 
 \begin{figure}[t!]
 \begin{center}
 \includegraphics[width=0.4\linewidth]{../Code/B1/plots/colormap.png}
-\includegraphics[width=0.4\linewidth]{../Code/B1/plots/error_colormap.png}
+\includegraphics[width=0.3\linewidth]{../Code/B1/plots/error_colormap.png}
 \end{center}
-\caption{Wave equation. Activation function $\tanh(x)$. Left: Comparison of solution $u(x,t)$ obtained from data and physics trained network against reference solution. Right: The error map plotted for solutions obtained from data and physics trained network.\\
-\textcolor{green}{headlines of the pictures: 'finite difference solution', 'data-driven NN', 'PINN'}\\
-\textcolor{green}{on right: data-driven picture above PINN picture (same sequence as on left)}\\
-\textcolor{green}{'400' is irritating, since training for data used only 320 (321) finite difference solutions}
-}\label{fig:wave_sol_error}
+\caption{Left: Solution $u(x,t)$ obtained from FD numerical scheme, PINN and HNN. Right: The error maps for PINN, DDNN and HNN}
+\label{fig:wave_sol_error}
 \end{figure}
 
 Figure~\ref{fig:wave_sol_error} (left) shows the comparison of the results of the 
@@ -81,17 +56,10 @@ of the pictures.}
 
 \begin{figure}[t!]
 \begin{center}
-\includegraphics[width=0.45\linewidth]{../Code/B1/plots/wave_numerics.png}
+%\includegraphics[width=0.45\linewidth]{../Code/B1/plots/wave_numerics.png}
 \includegraphics[width=0.45\linewidth]{../Code/B1/plots/evolution_plot.png}
 \end{center}
-\caption{Wave equation. Activation function $\tanh(x)$. Comparison of the finite difference
-solution against solutions obtained from the data- and physics-trained networks. 
-Left: $u(x,t)$ plotted at some time instances $t$. Right: Temporal evolution of the error
-at $x=0.5$.\\
-\textcolor{green}{once more, '100' and '400' are disturbing, it should be '81' and '321'.}\\
-\textcolor{green}{the same things should have in both pictures the same colors.}\\
-\textcolor{green}{For $t\approx 0.85$, the yellow and green curce should be much more away from 
-the red curve in the right picture, because the error is large.}}
+\caption{Left: Convergence of the optimizer using the loss functionals for DDNN, PINN and HNN. Right: Temporal evolution of velocity at $x=0.5$ for longer time period $t\in [0,1.5]$.}
 \label{fig:wave_evolution}
 \end{figure}
 

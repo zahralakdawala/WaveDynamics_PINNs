@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.7.25) (preloaded format=pdflatex 2022.7.26)  26 JUL 2022 17:25
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (MiKTeX 22.7.25) (preloaded format=pdflatex 2022.7.26)  23 SEP 2022 23:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1113,74 +1113,74 @@ LaTeX Info: Command `\dddot' is already robust on input line 31.
 LaTeX Info: Command `\ddddot' is already robust on input line 31.
 \c@lstlisting=\count430
 LaTeX Font Info:    Trying to load font information for T1+cmss on input line 6
-0.
+1.
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/base\t1cmss.fd
 File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Trying to load font information for LS1+stixscr on input li
-ne 60.
+ne 61.
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixscr.fd
 File: ls1stixscr.fd 2015/04/17 v1.1.2-latex STIX script LS1 font definitions
 )
 LaTeX Font Info:    Trying to load font information for LS2+stixex on input lin
-e 60.
+e 61.
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls2stixex.fd
 File: ls2stixex.fd 2015/04/17 v1.1.2-latex STIX extentions LS2 font definitions
 
 )
 LaTeX Font Info:    Trying to load font information for LS1+stixfrak on input l
-ine 60.
+ine 61.
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixfrak.fd
 File: ls1stixfrak.fd 2015/04/17 v1.1.2-latex STIX fraktur LS1 font definitions
 )
 LaTeX Font Info:    Trying to load font information for LS1+stixbb on input lin
-e 60.
+e 61.
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixbb.fd
 File: ls1stixbb.fd 2015/04/17 v1.1.2-latex STIX blackboard LS1 font definitions
 
 )
 LaTeX Font Info:    Trying to load font information for LS2+stixcal on input li
-ne 60.
+ne 61.
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls2stixcal.fd
 File: ls2stixcal.fd 2015/04/17 v1.1.2-latex STIX calligraphic LS2 font definiti
 ons
 )
 LaTeX Font Info:    Trying to load font information for LS1+stixsf on input lin
-e 60.
+e 61.
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls1stixsf.fd
 File: ls1stixsf.fd 2015/04/17 v1.1.2-latex STIX sans-serif LS1 font definitions
 
 )
 LaTeX Font Info:    Trying to load font information for LS2+stixtt on input lin
-e 60.
+e 61.
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ls2stixtt.fd
 File: ls2stixtt.fd 2015/04/17 v1.1.2-latex STIX typewriter LS2 font definitions
 
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 60.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 61.
 
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 60.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 61.
 
 
 (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-Overfull \hbox (346.99213pt too wide) in paragraph at lines 60--60
+Overfull \hbox (346.99213pt too wide) in paragraph at lines 61--61
 [][] | || []|[][] 
  []
 
-LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 60
+LaTeX Font Info:    Calculating math sizes for size <10.03749> on input line 61
 .
 (intro.tex
 Overfull \vbox (6.46347pt too high) has occurred while \output is active []
@@ -1193,205 +1193,190 @@ Overfull \vbox (6.46347pt too high) has occurred while \output is active []
 ])
 (problems.tex [2]) (neural_networks.tex [3]
 
-Package natbib Warning: Citation `??' on page 4 undefined on input line 52.
+Package natbib Warning: Citation `??' on page 4 undefined on input line 33.
 
+[4]
 LaTeX Font Info:    Trying to load font information for TS1+stix on input line 
-97.
-(C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ts1stix.fd
+79.
+ (C:\Users\zahra\AppData\Local\Programs\MiKTeX\tex/latex/stix\ts1stix.fd
 File: ts1stix.fd 2015/04/17 v1.1.2-latex STIX TS1 font definitions
 )
-[4]
 
-Package natbib Warning: Citation `??' on page 5 undefined on input line 106.
+Package natbib Warning: Citation `??' on page 5 undefined on input line 90.
 
+) (results.tex [5]
 
-Package natbib Warning: Citation `tensorflow2015-whitepaper' on page 5 undefine
-d on input line 113.
+LaTeX Warning: Reference `eq:loss' on page 6 undefined on input line 23.
 
-
-Package natbib Warning: Citation `NW06' on page 5 undefined on input line 115.
-
-) (results.tex
-
-Package natbib Warning: Citation `LW60' on page 5 undefined on input line 6.
-
-
-Package natbib Warning: Citation `LeV92' on page 5 undefined on input line 6.
-
-<../Code/B1/losses/combined_losses_reduction_data.png, id=54, 433.62pt x 289.08
+<../Code/B1/losses/combined_losses_reduction_data.png, id=75, 433.62pt x 289.08
 pt>
 File: ../Code/B1/losses/combined_losses_reduction_data.png Graphic file (type p
 ng)
 <use ../Code/B1/losses/combined_losses_reduction_data.png>
 Package pdftex.def Info: ../Code/B1/losses/combined_losses_reduction_data.png  
-used on input line 43.
+used on input line 28.
 (pdftex.def)             Requested size: 228.37698pt x 152.25447pt.
-<../Code/B1/losses//combined_losses_reduction_PINNs.png, id=56, 433.62pt x 289.
+<../Code/B1/losses//combined_losses_reduction_PINNs.png, id=77, 433.62pt x 289.
 08pt>
 File: ../Code/B1/losses//combined_losses_reduction_PINNs.png Graphic file (type
  png)
 <use ../Code/B1/losses//combined_losses_reduction_PINNs.png>
 Package pdftex.def Info: ../Code/B1/losses//combined_losses_reduction_PINNs.png
-  used on input line 44.
+  used on input line 29.
 (pdftex.def)             Requested size: 228.37698pt x 152.25447pt.
-
-LaTeX Warning: Reference `eq:loss' on page 5 undefined on input line 54.
-
-<../Code/B1/plots/colormap.png, id=59, 303.534pt x 260.172pt>
+<../Code/B1/plots/colormap.png, id=78, 303.534pt x 260.172pt>
 File: ../Code/B1/plots/colormap.png Graphic file (type png)
 <use ../Code/B1/plots/colormap.png>
-Package pdftex.def Info: ../Code/B1/plots/colormap.png  used on input line 63.
+Package pdftex.def Info: ../Code/B1/plots/colormap.png  used on input line 41.
 (pdftex.def)             Requested size: 203.00005pt x 174.00069pt.
-<../Code/B1/plots/error_colormap.png, id=60, 303.534pt x 260.172pt>
+<../Code/B1/plots/error_colormap.png, id=79, 303.534pt x 260.172pt>
 File: ../Code/B1/plots/error_colormap.png Graphic file (type png)
 <use ../Code/B1/plots/error_colormap.png>
 Package pdftex.def Info: ../Code/B1/plots/error_colormap.png  used on input lin
-e 64.
-(pdftex.def)             Requested size: 203.00005pt x 174.00069pt.
-<../Code/B1/plots/wave_numerics.png, id=62, 402.90524pt x 356.532pt>
-File: ../Code/B1/plots/wave_numerics.png Graphic file (type png)
-<use ../Code/B1/plots/wave_numerics.png>
-Package pdftex.def Info: ../Code/B1/plots/wave_numerics.png  used on input line
- 84.
-(pdftex.def)             Requested size: 228.37698pt x 202.09377pt.
-<../Code/B1/plots/evolution_plot.png, id=63, 260.172pt x 173.448pt>
+e 42.
+(pdftex.def)             Requested size: 152.2539pt x 130.5025pt.
+[6 <../Code/B1/losses/combined_losses_reduction_data.png> <../Code/B1/losses//c
+ombined_losses_reduction_PINNs.png> <../Code/B1/plots/colormap.png> <../Code/B1
+/plots/error_colormap.png>]
+<../Code/B1/plots/evolution_plot.png, id=91, 260.172pt x 173.448pt>
 File: ../Code/B1/plots/evolution_plot.png Graphic file (type png)
 <use ../Code/B1/plots/evolution_plot.png>
 Package pdftex.def Info: ../Code/B1/plots/evolution_plot.png  used on input lin
-e 85.
+e 60.
 (pdftex.def)             Requested size: 228.37698pt x 152.25888pt.
-[5] [6 <../Code/B1/losses/combined_losses_reduction_data.png> <../Code/B1/losse
-s//combined_losses_reduction_PINNs.png> <../Code/B1/plots/colormap.png> <../Cod
-e/B1/plots/error_colormap.png>]
-
-Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 122.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 122.
+(hyperref)                removing `math shift' on input line 90.
 
-<./plots/h_colormap_b1.png, id=87, 390.258pt x 520.344pt>
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                removing `math shift' on input line 90.
+
+<./plots/h_colormap_b1.png, id=97, 390.258pt x 520.344pt>
 File: ./plots/h_colormap_b1.png Graphic file (type png)
 <use ./plots/h_colormap_b1.png>
-Package pdftex.def Info: ./plots/h_colormap_b1.png  used on input line 126.
+Package pdftex.def Info: ./plots/h_colormap_b1.png  used on input line 94.
 (pdftex.def)             Requested size: 228.37698pt x 304.50719pt.
-<./plots/uh_colormap_b1.png, id=88, 390.258pt x 520.344pt>
+<./plots/uh_colormap_b1.png, id=98, 390.258pt x 520.344pt>
 File: ./plots/uh_colormap_b1.png Graphic file (type png)
 <use ./plots/uh_colormap_b1.png>
-Package pdftex.def Info: ./plots/uh_colormap_b1.png  used on input line 127.
+Package pdftex.def Info: ./plots/uh_colormap_b1.png  used on input line 95.
 (pdftex.def)             Requested size: 228.37698pt x 304.50719pt.
-<../Code/B2/plots/h_errorplot_b1.png, id=92, 390.258pt x 520.344pt>
+<../Code/B2/plots/h_errorplot_b1.png, id=102, 390.258pt x 520.344pt>
 File: ../Code/B2/plots/h_errorplot_b1.png Graphic file (type png)
 <use ../Code/B2/plots/h_errorplot_b1.png>
 Package pdftex.def Info: ../Code/B2/plots/h_errorplot_b1.png  used on input lin
-e 141.
+e 109.
 (pdftex.def)             Requested size: 228.37698pt x 304.50719pt.
-<../Code/B2/plots/uh_errorplot_b1.png, id=93, 390.258pt x 520.344pt>
+<../Code/B2/plots/uh_errorplot_b1.png, id=103, 390.258pt x 520.344pt>
 File: ../Code/B2/plots/uh_errorplot_b1.png Graphic file (type png)
 <use ../Code/B2/plots/uh_errorplot_b1.png>
 Package pdftex.def Info: ../Code/B2/plots/uh_errorplot_b1.png  used on input li
-ne 142.
+ne 110.
 (pdftex.def)             Requested size: 228.37698pt x 304.50719pt.
-<../Code/B2/plots/h_b1.png, id=95, 402.303pt x 366.168pt>
+<../Code/B2/plots/h_b1.png, id=105, 407.121pt x 360.1455pt>
 File: ../Code/B2/plots/h_b1.png Graphic file (type png)
 <use ../Code/B2/plots/h_b1.png>
-Package pdftex.def Info: ../Code/B2/plots/h_b1.png  used on input line 158.
-(pdftex.def)             Requested size: 228.37698pt x 207.86307pt.
-<../Code/B2/plots/uh_b1.png, id=96, 397.485pt x 355.92975pt>
+Package pdftex.def Info: ../Code/B2/plots/h_b1.png  used on input line 126.
+(pdftex.def)             Requested size: 228.37698pt x 202.0263pt.
+<../Code/B2/plots/uh_b1.png, id=106, 401.0985pt x 356.532pt>
 File: ../Code/B2/plots/uh_b1.png Graphic file (type png)
 <use ../Code/B2/plots/uh_b1.png>
-Package pdftex.def Info: ../Code/B2/plots/uh_b1.png  used on input line 159.
-(pdftex.def)             Requested size: 228.37698pt x 204.50594pt.
-<../Code/B2/plots//h_evolution_plot_b1.png, id=97, 260.172pt x 173.448pt>
+Package pdftex.def Info: ../Code/B2/plots/uh_b1.png  used on input line 127.
+(pdftex.def)             Requested size: 228.37698pt x 203.00229pt.
+<../Code/B2/plots//h_evolution_plot_b1.png, id=107, 491.436pt x 339.669pt>
 File: ../Code/B2/plots//h_evolution_plot_b1.png Graphic file (type png)
 <use ../Code/B2/plots//h_evolution_plot_b1.png>
 Package pdftex.def Info: ../Code/B2/plots//h_evolution_plot_b1.png  used on inp
-ut line 168.
-(pdftex.def)             Requested size: 228.37698pt x 152.25888pt.
-<../Code/B2/plots/uh_evolution_plot_b1.png, id=98, 260.172pt x 173.448pt>
+ut line 136.
+(pdftex.def)             Requested size: 228.37698pt x 157.85115pt.
+<../Code/B2/plots/uh_evolution_plot_b1.png, id=108, 519.74174pt x 360.74776pt>
 File: ../Code/B2/plots/uh_evolution_plot_b1.png Graphic file (type png)
 <use ../Code/B2/plots/uh_evolution_plot_b1.png>
 Package pdftex.def Info: ../Code/B2/plots/uh_evolution_plot_b1.png  used on inp
-ut line 169.
-(pdftex.def)             Requested size: 228.37698pt x 152.25888pt.
+ut line 137.
+(pdftex.def)             Requested size: 228.37698pt x 158.51482pt.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 180.
+(hyperref)                removing `math shift' on input line 148.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `math shift' on input line 180.
+(hyperref)                removing `math shift' on input line 148.
 
-[7 <../Code/B1/plots/wave_numerics.png> <../Code/B1/plots/evolution_plot.png>]
-<../Code/B3/plots/h_colormap_b2.png, id=117, 390.258pt x 520.344pt>
+[7 <../Code/B1/plots/evolution_plot.png>]
+<../Code/B3/plots/h_colormap_b2.png, id=125, 390.258pt x 520.344pt>
 File: ../Code/B3/plots/h_colormap_b2.png Graphic file (type png)
 <use ../Code/B3/plots/h_colormap_b2.png>
 Package pdftex.def Info: ../Code/B3/plots/h_colormap_b2.png  used on input line
- 192.
+ 160.
 (pdftex.def)             Requested size: 228.37698pt x 304.50719pt.
-<../Code/B3/plots/uh_colormap_b2.png, id=118, 390.258pt x 520.344pt>
+<../Code/B3/plots/uh_colormap_b2.png, id=126, 390.258pt x 520.344pt>
 File: ../Code/B3/plots/uh_colormap_b2.png Graphic file (type png)
 <use ../Code/B3/plots/uh_colormap_b2.png>
 Package pdftex.def Info: ../Code/B3/plots/uh_colormap_b2.png  used on input lin
-e 193.
+e 161.
 (pdftex.def)             Requested size: 228.37698pt x 304.50719pt.
-<../Code/B3/plots/h_errorplot_b2.png, id=119, 650.43pt x 867.24pt>
+<../Code/B3/plots/h_errorplot_b2.png, id=127, 650.43pt x 867.24pt>
 File: ../Code/B3/plots/h_errorplot_b2.png Graphic file (type png)
 <use ../Code/B3/plots/h_errorplot_b2.png>
 Package pdftex.def Info: ../Code/B3/plots/h_errorplot_b2.png  used on input lin
-e 203.
+e 171.
 (pdftex.def)             Requested size: 228.37698pt x 304.50456pt.
-<../Code/B3/plots/uh_errorplot_b2.png, id=120, 390.258pt x 520.344pt>
+<../Code/B3/plots/uh_errorplot_b2.png, id=128, 390.258pt x 520.344pt>
 File: ../Code/B3/plots/uh_errorplot_b2.png Graphic file (type png)
 <use ../Code/B3/plots/uh_errorplot_b2.png>
 Package pdftex.def Info: ../Code/B3/plots/uh_errorplot_b2.png  used on input li
-ne 204.
+ne 172.
 (pdftex.def)             Requested size: 228.37698pt x 304.50719pt.
 
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<../Code/B3/plots/h_b2.png, id=121, 406.51875pt x 361.95226pt>
+<../Code/B3/plots/h_b2.png, id=129, 406.51875pt x 361.95226pt>
 File: ../Code/B3/plots/h_b2.png Graphic file (type png)
 <use ../Code/B3/plots/h_b2.png>
-Package pdftex.def Info: ../Code/B3/plots/h_b2.png  used on input line 211.
+Package pdftex.def Info: ../Code/B3/plots/h_b2.png  used on input line 179.
 (pdftex.def)             Requested size: 228.37698pt x 203.33806pt.
-<../Code/B3/plots/uh_b2.png, id=122, 401.0985pt x 359.54324pt>
+<../Code/B3/plots/uh_b2.png, id=130, 401.0985pt x 359.54324pt>
 File: ../Code/B3/plots/uh_b2.png Graphic file (type png)
 <use ../Code/B3/plots/uh_b2.png>
-Package pdftex.def Info: ../Code/B3/plots/uh_b2.png  used on input line 212.
+Package pdftex.def Info: ../Code/B3/plots/uh_b2.png  used on input line 180.
 (pdftex.def)             Requested size: 228.37698pt x 204.71684pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<./plots/h_evolution_plot_b2.png, id=123, 260.172pt x 173.448pt>
+<./plots/h_evolution_plot_b2.png, id=131, 260.172pt x 173.448pt>
 File: ./plots/h_evolution_plot_b2.png Graphic file (type png)
 <use ./plots/h_evolution_plot_b2.png>
-Package pdftex.def Info: ./plots/h_evolution_plot_b2.png  used on input line 22
-0.
+Package pdftex.def Info: ./plots/h_evolution_plot_b2.png  used on input line 18
+8.
 (pdftex.def)             Requested size: 228.37698pt x 152.25888pt.
-<../Code/B3/plots/uh_evolution_plot_b2.png, id=124, 260.172pt x 173.448pt>
+<../Code/B3/plots/uh_evolution_plot_b2.png, id=132, 260.172pt x 173.448pt>
 File: ../Code/B3/plots/uh_evolution_plot_b2.png Graphic file (type png)
 <use ../Code/B3/plots/uh_evolution_plot_b2.png>
 Package pdftex.def Info: ../Code/B3/plots/uh_evolution_plot_b2.png  used on inp
-ut line 221.
+ut line 189.
 (pdftex.def)             Requested size: 228.37698pt x 152.25888pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 ) (conclusions.tex) [8 <./plots/h_colormap_b1.png> <./plots/uh_colormap_b1.png>
 ]
-Overfull \vbox (27.28958pt too high) has occurred while \output is active []
+Overfull \vbox (9.38007pt too high) has occurred while \output is active []
 
 
 [9 <../Code/B2/plots/h_errorplot_b1.png> <../Code/B2/plots/uh_errorplot_b1.png>
  <../Code/B2/plots/h_b1.png> <../Code/B2/plots/uh_b1.png>] [10 <../Code/B2/plot
 s//h_evolution_plot_b1.png> <../Code/B2/plots/uh_evolution_plot_b1.png> <../Cod
-e/B3/plots/h_colormap_b2.png> <../Code/B3/plots/uh_colormap_b2.png>] [11 <../Co
-de/B3/plots/h_errorplot_b2.png> <../Code/B3/plots/uh_errorplot_b2.png> <../Code
-/B3/plots/h_b2.png> <../Code/B3/plots/uh_b2.png>]
-No file pinns_for_pdes.bbl.
+e/B3/plots/h_colormap_b2.png> <../Code/B3/plots/uh_colormap_b2.png>]
+Overfull \vbox (23.04588pt too high) has occurred while \output is active []
+
+
+[11 <../Code/B3/plots/h_errorplot_b2.png> <../Code/B3/plots/uh_errorplot_b2.png
+> <../Code/B3/plots/h_b2.png> <../Code/B3/plots/uh_b2.png>] (pinns_for_pdes.bbl
+)
 
 Package natbib Warning: There were undefined citations.
 
@@ -1402,29 +1387,30 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 21055 strings out of 478337
- 326908 string characters out of 2836666
- 611045 words of memory out of 3000000
- 39037 multiletter control sequences out of 15000+600000
- 577708 words of font info for 152 fonts, out of 8000000 for 9000
+ 21076 strings out of 478337
+ 327113 string characters out of 2836666
+ 610421 words of memory out of 3000000
+ 39051 multiletter control sequences out of 15000+600000
+ 580473 words of font info for 153 fonts, out of 8000000 for 9000
  1167 hyphenation exceptions out of 8191
- 87i,15n,91p,1650b,533s stack positions out of 10000i,1000n,20000p,200000b,80000s
-{C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/stix/stix-ts1.e
+ 87i,15n,91p,1650b,586s stack positions out of 10000i,1000n,20000p,200000b,80000s
+{C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/stix/stix-t1.en
+c}{C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/stix/stix-ts1.e
 nc} <C:\Users\zahra\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ecs
-s0500.pk>{C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/stix/sti
-x-t1.enc}<C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/
+s0500.pk><C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/
 STIXGeneral-Bold.pfb><C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/type1/
-public/stix/STIXGeneral-Regular.pfb><C:/Users/zahra/AppData/Local/Programs/MiKT
-eX/fonts/type1/public/stix/stix-mathcal.pfb><C:/Users/zahra/AppData/Local/Progr
-ams/MiKTeX/fonts/type1/public/stix/stix-mathex.pfb><C:/Users/zahra/AppData/Loca
-l/Programs/MiKTeX/fonts/type1/public/stix/stix-mathit.pfb><C:/Users/zahra/AppDa
-ta/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-mathrm.pfb><C:/Users/zahr
-a/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-mathscr.pfb><C:/Us
-ers/zahra/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-mathsf.pfb
->
-Output written on pinns_for_pdes.pdf (12 pages, 988621 bytes).
+public/stix/STIXGeneral-Italic.pfb><C:/Users/zahra/AppData/Local/Programs/MiKTe
+X/fonts/type1/public/stix/STIXGeneral-Regular.pfb><C:/Users/zahra/AppData/Local
+/Programs/MiKTeX/fonts/type1/public/stix/stix-mathcal.pfb><C:/Users/zahra/AppDa
+ta/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-mathex.pfb><C:/Users/zahr
+a/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-mathit.pfb><C:/Use
+rs/zahra/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-mathrm.pfb>
+<C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/stix-math
+scr.pfb><C:/Users/zahra/AppData/Local/Programs/MiKTeX/fonts/type1/public/stix/s
+tix-mathsf.pfb>
+Output written on pinns_for_pdes.pdf (12 pages, 1163223 bytes).
 PDF statistics:
- 296 PDF objects out of 1000 (max. 8388607)
- 45 named destinations out of 1000 (max. 500000)
- 287 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 318 PDF objects out of 1000 (max. 8388607)
+ 50 named destinations out of 1000 (max. 500000)
+ 290 words of extra memory for PDF output out of 10000 (max. 10000000)
 
