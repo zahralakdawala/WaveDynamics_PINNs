@@ -1,4 +1,3 @@
-import lib.tf_silent
 from lib.network import Network
 from lib.optimizer import L_BFGS_B
 from pinn import PINN

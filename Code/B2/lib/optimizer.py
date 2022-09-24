@@ -147,11 +147,14 @@ class L_BFGS_B:
         self.losses.append(loss)
         
         self.loss1.append(loss_arrays[0])
+        self.loss2.append(loss_arrays[1])
         
         if (ModelInfo.mode == 'PINNs') or (ModelInfo.mode == 'dataAndPhysics'):
-            self.loss2.append(loss_arrays[1])
-        if ModelInfo.mode == 'dataAndPhysics':
             self.loss3.append(loss_arrays[2])
+            self.loss4.append(loss_arrays[3])
+            
+        if ModelInfo.mode == 'dataAndPhysics':
+            self.loss5.append(loss_arrays[4])
 
     def fit(self):
         """
@@ -171,19 +174,26 @@ class L_BFGS_B:
         self.progbar.on_epoch_end(1)
         self.progbar.on_train_end()
         
-        plt.title('Losses')
+        plt.title('Losses ' + ModelInfo.mode)
         plt.xlabel('Iteration')
         plt.ylabel('Log Loss')
         
         if ModelInfo.mode == 'data':
             plt.plot(np.log(self.loss1), label = 'Loss data')
+            plt.plot(np.log(self.loss2), label = 'Loss data')
+            
         if ModelInfo.mode == 'PINNs':
             plt.plot(np.log(self.loss1), label = 'Loss PDE')
             plt.plot(np.log(self.loss2), label = 'Loss ini')
+            plt.plot(np.log(self.loss3), label = 'Loss PDE')
+            plt.plot(np.log(self.loss4), label = 'Loss ini')
+            
         if ModelInfo.mode == 'dataAndPhysics':
             plt.plot(np.log(self.loss1), label = 'Loss PDE')
-            plt.plot(np.log(self.loss2), label = 'Loss ini')      
-            plt.plot(np.log(self.loss3), label = 'Loss data')
+            plt.plot(np.log(self.loss2), label = 'Loss ini')
+            plt.plot(np.log(self.loss3), label = 'Loss PDE')
+            plt.plot(np.log(self.loss4), label = 'Loss ini')
+            plt.plot(np.log(self.loss5), label = 'Loss ini')
 
         plt.plot(np.log(self.losses), label = 'Overall loss', color = 'black')
         plt.legend()

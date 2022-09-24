@@ -3,6 +3,7 @@ from keras.models import load_model
 import matplotlib.pyplot as plt
 from plotting import *
 from fdm.wave1d_matrixForm import *
+import pandas as pd
 
 network_PINNs    = load_model('trained_networks/wave_trained_network_PINNs.h5')
 network_data_100 = load_model('trained_networks/wave_trained_network_data_100.h5')
@@ -10,7 +11,7 @@ network_data_400 = load_model('trained_networks/wave_trained_network_data.h5')
 network_dataPhys = load_model('trained_networks/wave_trained_network_dataAndPhysics_100.h5')
 
 
-plot = 2
+plot = 4
 
 if plot == 1:
     
@@ -27,10 +28,10 @@ if plot == 1:
     u_dPhys = network_dataPhys.predict(tx)
     
     plt.plot(T, u_pinns, label = 'PINN', color = 'blue')
-    plt.plot(T, u_data, label = 'data=driven NN', color = 'orange')
+    plt.plot(T, u_data, label = 'DDNN', color = 'orange')
     #plt.plot(T, u_400, label = 'data_400')
-    plt.plot(T, u_dPhys, label = 'hybrid NN', color = 'green')
-    plt.plot(T, U(0*T + X, T), label = 'reference', color = 'red')
+    plt.plot(T, u_dPhys, label = 'HNN', color = 'green')
+    plt.plot(T, U(0*T + X, T), label = 'finite difference solution', color = 'red')
     plt.xlabel('Time (s)')
     plt.ylabel('Velocity (m/s)')
     plt.title('Evolution of velocity at x = 0.5')
@@ -63,11 +64,11 @@ if plot == 2:
         u_dataPhys = network_dataPhys.predict(tx)
         
         plt.ylim(-1, 1)
-        plt.plot(x_flat, u_num[:, T[i]], label = 'reference', color = 'red')
+        plt.plot(x_flat, u_num[:, T[i]], label = 'finite difference solution', color = 'red')
         plt.plot(x_flat, u_pinns, label = 'PINN', color = 'blue')
-        plt.plot(x_flat, u_data100, label = 'data-driven NN', color = 'orange')
+        plt.plot(x_flat, u_data100, label = 'DDNN', color = 'orange')
         #plt.plot(x_flat, u_data400, label = 'data_400')
-        plt.plot(x_flat, u_dataPhys, label = 'hybrid NN', color = 'green')
+        plt.plot(x_flat, u_dataPhys, label = 'HNN', color = 'green')
         plt.title('t={}'.format(round(t_cs, 3)))
         plt.xlabel('x (m)')
         plt.ylabel('u(t,x)')
@@ -112,7 +113,22 @@ if plot == 3:
     u_dPhy  = u_dPhy.reshape(t.shape)
     
     # plot u(t,x) distribution as a color-map
-    heat_map_plot([u_num, u_data, u_pinns, u_dPhy], ['finite-difference solution', 'data-driven NN', 'PINN', 'hybrid NN' ], t, x, 'colormap', save = True)
+    heat_map_plot([u_num, u_data, u_pinns, u_dPhy], ['finite difference solution', 'DDNN', 'PINN', 'HNN' ], t, x, 'colormap', save = True)
     
     # Error Plot 
-    heat_map_plot([abs(u_pinns-u_num), abs(u_data - u_num), abs(u_dPhy - u_num)], ['Error PINN', 'Error data-driven NN', 'Error hybrid NN'], t, x, 'error_colormap', save = True)
+    heat_map_plot([abs(u_data - u_num), abs(u_pinns-u_num), abs(u_dPhy - u_num)], ['DDNN', 'PINN', 'HNN'], t, x, 'error_colormap', save = True)
+
+if plot == 4:
+    l_d = pd.read_csv('losses/CSV/tanh_data.csv')
+    l_p = pd.read_csv('losses/CSV/tanh_PINNs.csv')
+    l_h = pd.read_csv('losses/CSV/tanh_dataAndPhysics.csv')
+    
+    plt.title('Losses for different networks')
+    plt.xlabel('Iteration')
+    plt.ylabel('Log loss')
+    plt.plot(l_d.index, np.log(l_d), label = 'data')
+    plt.plot(l_p.index, np.log(l_p), label = 'PINNs')
+    plt.plot(l_h.index, np.log(l_h), label = 'dataAndPhysics')
+    plt.legend()
+    plt.savefig('losses/allNetworks.png')
+    plt.show()

@@ -2,7 +2,15 @@ import scipy.optimize
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
+import sys
+
+sys.path.append('../B1')
+
 from benchmark2 import *
+
+
+ModelInfo = benchmark()
+
 
 class L_BFGS_B:
     """
@@ -38,10 +46,17 @@ class L_BFGS_B:
         self.y_train = y_train#[ tf.constant(y, dtype=tf.float32) for y in y_train ]
         self.loss1 = []
         self.loss2 = []
-        self.loss3 = []
-        self.loss4 = []
+        
+
         self.factr = factr
-        self.ModelInfo = benchmark()
+        
+        if (ModelInfo.mode == 'PINNs') or (ModelInfo.mode == 'dataAndPhysics'):
+            self.loss3 = []
+            self.loss4 = []
+            
+        if ModelInfo.mode == 'dataAndPhysics':
+            self.loss5 = []
+            
         self.m = m
         self.maxls = maxls
         self.maxiter = maxiter
@@ -90,11 +105,15 @@ class L_BFGS_B:
             
             loss_array = [loss1, loss2]
             
-            if self.ModelInfo.mode == "PINNs":
+            if ModelInfo.mode in ["PINNs", "dataAndPhysics"]:
                 loss3 = tf.reduce_mean(tf.keras.losses.mse(self.model(x)[2], y[2]))
                 loss4 = tf.reduce_mean(tf.keras.losses.mse(self.model(x)[3], y[3]))
-                
                 loss_array = loss_array + [loss3, loss4]
+                
+                if ModelInfo.mode == 'dataAndPhysics':
+                    loss5 = tf.reduce_mean(tf.keras.losses.mse(self.model(x)[4], y[4]))
+                    loss_array = loss_array + [loss5]
+                
         grads = g.gradient(loss, self.model.trainable_variables)
         return loss, grads, loss_array
 
@@ -127,14 +146,18 @@ class L_BFGS_B:
             weights: flatten weights.
         """
         self.progbar.on_batch_begin(0)
-        loss, _, loss_array = self.evaluate(weights)
+        loss, _, loss_arrays = self.evaluate(weights)
         
         self.losses.append(loss)
-        self.loss1.append(loss_array[0])
-        self.loss2.append(loss_array[1])
-        if self.ModelInfo.mode == 'PINNs':
-            self.loss3.append(loss_array[2])
-            self.loss4.append(loss_array[3])
+        self.loss1.append(loss_arrays[0])
+        self.loss2.append(loss_arrays[1])
+        
+        if (ModelInfo.mode == 'PINNs') or (ModelInfo.mode == 'dataAndPhysics'):
+            self.loss3.append(loss_arrays[2])
+            self.loss4.append(loss_arrays[3])
+            
+        if ModelInfo.mode == 'dataAndPhysics':
+            self.loss5.append(loss_arrays[4])
         
         self.progbar.on_batch_end(0, logs=dict(zip(self.metrics, [loss])))
 
@@ -159,33 +182,58 @@ class L_BFGS_B:
         
         ModelInfo = benchmark()
         
-        plt.title('Losses')
+        plt.title('Losses - '+ ModelInfo.mode)
         plt.xlabel('Iteration')
-        plt.ylabel('Log Loss')
+        plt.ylabel('Log Loss' )
         
-        
-        plt.plot(np.log(self.loss1), label = 'Loss '+ self.ModelInfo.mode)
-        plt.plot(np.log(self.loss2), label = 'Loss u_ini')
-        
-        if self.ModelInfo.mode == 'PINNs':
-            plt.plot(np.log(self.loss3), label = 'Loss du_ini')
-            plt.plot(np.log(self.loss4), label = 'Loss u_bnd')
+        if ModelInfo.mode == 'data':
+            plt.plot(np.log(self.loss1), label = 'u_domain')
+            plt.plot(np.log(self.loss2), label = 'u_b')
             
-        plt.plot(np.log(self.losses), label = 'Overall loss', color = 'black')
+        if ModelInfo.mode == 'PINNs':
+            plt.plot(np.log(self.loss1), label = 'u_pde')
+            plt.plot(np.log(self.loss2), label = 'u_0')
+            plt.plot(np.log(self.loss3), label = "du_0")
+            plt.plot(np.log(self.loss4), label = 'u_b')
+            
+        if ModelInfo.mode == 'dataAndPhysics':
+            plt.plot(np.log(self.loss1), label = 'u_pde')
+            plt.plot(np.log(self.loss2), label = 'u_domain')
+            plt.plot(np.log(self.loss3), label = 'u_0')
+            plt.plot(np.log(self.loss4), label = "du_0")
+            plt.plot(np.log(self.loss5), label = 'u_b')
+           
         plt.legend()
         plt.savefig('losses/combined_losses_reduction_'+ ModelInfo.mode +'.png')
         plt.show()
         
-        loss1 = np.array(self.loss1)
-        np.savetxt('losses/CSV/loss_PDE_'+ ModelInfo.mode +'.csv', loss1, delimiter = ',')
-        loss2 = np.array(self.loss2)
-        np.savetxt('losses/CSV/loss_u_ini_'+ ModelInfo.mode +'.csv', loss2, delimiter = ',')
-        
-        if self.ModelInfo.mode == 'PINNs':
+        if ModelInfo.mode == 'data':
+            loss1 = np.array(self.loss1)
+            np.savetxt('losses/CSV/loss_fdm_'+ ModelInfo.mode +'.csv', loss1, delimiter = ',')
+            loss2 = np.array(self.loss2)
+            np.savetxt('losses/CSV/loss_u_b_'+ ModelInfo.mode +'.csv', loss2, delimiter = ',')
+            
+        if ModelInfo.mode == 'PINNs':
+            loss1 = np.array(self.loss1)
+            np.savetxt('losses/CSV/loss_PDE_'+ ModelInfo.mode +'.csv', loss1, delimiter = ',')
+            loss2 = np.array(self.loss2)
+            np.savetxt('losses/CSV/loss_u_0_'+ ModelInfo.mode +'.csv', loss2, delimiter = ',')
             loss3 = np.array(self.loss3)
-            np.savetxt('losses/CSV/loss_du_ini_'+ ModelInfo.mode +'.csv', loss3, delimiter = ',')
+            np.savetxt('losses/CSV/loss_du_0_'+ ModelInfo.mode +'.csv', loss3, delimiter = ',')
             loss4 = np.array(self.loss4)
-            np.savetxt('losses/CSV/loss_u_bnd_'+ ModelInfo.mode +'.csv', loss4, delimiter = ',')
+            np.savetxt('losses/CSV/loss_u_b_'+ ModelInfo.mode +'.csv', loss4, delimiter = ',')
+        
+        if ModelInfo.mode == 'dataAndPhysics':
+            loss1 = np.array(self.loss1)
+            np.savetxt('losses/CSV/loss_PDE_'+ ModelInfo.mode +'.csv', loss1, delimiter = ',')
+            loss2 = np.array(self.loss2)
+            np.savetxt('losses/CSV/loss_fdm_'+ ModelInfo.mode +'.csv', loss2, delimiter = ',')
+            loss3 = np.array(self.loss3)
+            np.savetxt('losses/CSV/loss_u_0_'+ ModelInfo.mode +'.csv', loss3, delimiter = ',')
+            loss4 = np.array(self.loss4)
+            np.savetxt('losses/CSV/loss_du_0_'+ ModelInfo.mode +'.csv', loss4, delimiter = ',')
+            loss5 = np.array(self.loss5)
+            np.savetxt('losses/CSV/loss_u_b_'+ ModelInfo.mode +'.csv', loss5, delimiter = ',')
             
             
         plt.title('Loss in L_BFGS')
