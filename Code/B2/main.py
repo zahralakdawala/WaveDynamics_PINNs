@@ -21,7 +21,7 @@ if __name__ == '__main__':
         network = Network().build(layers = ModelInfo.layers)
         network.summary()
         
-        # build a PINN model
+        # build a PINN model .. 
         pinn = PINN(network).build()
     
         # training input and output

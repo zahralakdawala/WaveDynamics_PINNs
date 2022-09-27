@@ -9,9 +9,9 @@ from lib.SWE1D import *
 
 class InputVariables:
     def __init__(self, num_train = 200, num_test = 200, xstart = 0, \
-                 xend = 1, tstart = 0, tend = 0.15, layers = 6, \
-                 nodes = 30, train = False, mode = 'PINNs',\
-                 benchmark = 5):
+                 xend = 1, tstart = 0, tend = 0.15, layers = 10, \
+                 nodes = 30, train = True, mode = 'dataAndPhysics',\
+                 benchmark = 1):
         
         # number of training samples
         self.num_train_samples = num_train
@@ -43,7 +43,7 @@ class InputVariables:
             sign = -1
             if self.mode == 'data':
                 sign = 1
-            idx = np.arange(len(t_num))[::1]
+            idx = (np.arange(len(t_num))[::20])[1:]
 
             x, t, hsol, uhsol = [], [], [], []
             
@@ -59,6 +59,7 @@ class InputVariables:
             self.uhsol = np.array(uhsol).reshape(-1, 1)
             
             self.num_train_samples = len(self.tsol)
+            print(self.num_train_samples)
         
 #InputVariables()
 
@@ -99,13 +100,14 @@ class TrainingOutput(TrainingInput):
         t_flat  = np.linspace(self.tstart, self.tend, self.num_train_samples)
         self.zeros   = np.zeros((self.num_train_samples, 2))
     
-        self.hu_ini  = self.initial_conditions(self.tx_ini[..., 1])
+        self.hu_ini  = self.initial_conditions(self.tx_ini[..., 1], noise = True)
 
         if self.mode in ['dataAndPhysics', 'data']:
             self.hu_sol  = np.concatenate([self.hsol, self.uhsol], axis = 1)
 
     def get_ytrain(self):
         if self.mode == 'dataAndPhysics':
+
             return [self.zeros, self.hu_ini, self.hu_sol]
         elif self.mode == 'PINNs':
             return [self.zeros, self.hu_ini]
@@ -130,12 +132,17 @@ class TrainingOutput(TrainingInput):
                 
         return val
         
-    def initial_conditions (self, x, t=0):
+    def initial_conditions (self, x, t=0, noise = False):
         nx = self.num_train_samples
         h_uh = np.zeros((nx, 2))
         
         if self.benchmark == 1:
-            h_uh[:, 0] +=  0.5*np.sin(np.pi*x) 
+            if noise:
+                random = np.random.rand(len(x))*10e-3
+            else:
+                random = 0
+                
+            h_uh[:, 0] +=  0.5*np.sin(np.pi*x) + random
         elif self.benchmark == 2:
             h_uh[:, 0] += 2.0 + 0.1*np.sin ( 2.0 * np.pi * x )
         elif self.benchmark == 3: #Weak Shock

@@ -12,7 +12,7 @@ class benchmark:
         self.xstart = xstart
         self.xend   = xend
         self.Nx     = 100
-        self.mode   = 'dataAndPhysics'  # 'PINNs' or 'data'
+        self.mode   = 'data'  # 'PINNs' or 'data'
         
         
         self.tstart = tstart

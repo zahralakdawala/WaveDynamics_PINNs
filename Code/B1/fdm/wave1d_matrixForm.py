@@ -6,6 +6,8 @@ from matplotlib.colors import Normalize
 from matplotlib.gridspec import GridSpec
 import tensorflow as tf
 from plotting import *
+import sys
+sys.path.append('../B1')
 from benchmark2 import *
 
 

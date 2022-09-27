@@ -1,6 +1,7 @@
 from benchmark import *
 from keras.models import load_model
 import matplotlib.pyplot as plt
+import pandas as pd
 
 Model = SWE()
 benchmark = Model.benchmark
@@ -10,7 +11,8 @@ network_data     = load_model('trained_networks/SWE_maxiter10000_b'+str(benchmar
 if benchmark == 2:
     network_dataPINN = load_model('trained_networks/SWE_maxiter10000_b2_dataAndPhysics.h5')
 
-plot = 3
+plot = 4
+
 save = True
 
 if plot == 1:
@@ -26,13 +28,13 @@ if plot == 1:
     h_pinns = network_PINNs.predict(tx)[..., 0]
     h_data  = network_data.predict(tx)[..., 0]
     
-    plt.plot(T, h_pinns, label = 'h PINNs')
-    plt.plot(T, h_data, label = 'h data')
+    plt.plot(T, h_pinns, label = 'h PINN')
+    plt.plot(T, h_data, label = 'h DDNN')
     if ModelInfo.benchmark == 2:
         h_dPhys = network_dataPINN.predict(tx)[..., 0]
-        plt.plot(T, h_dPhys, label = 'h dataAndPhysics')
+        plt.plot(T, h_dPhys, label = 'h HNN')
     plt.plot(ModelInfo.t_num, ModelInfo.h_num[qua, :], label = 'h reference')
-    plt.ylim(1.5, 3)
+    plt.ylim(1.5, 2.4)
     plt.xlabel('Time (s)')
     plt.ylabel('Height (m)')
     plt.title('Evolution of height at x = 0')
@@ -44,13 +46,13 @@ if plot == 1:
     uh_pinns = network_PINNs.predict(tx)[..., 1] * network_PINNs.predict(tx)[..., 0]
     uh_data  = network_data.predict(tx)[..., 1] 
         
-    plt.plot(T, uh_pinns, label = 'uh PINNs')
-    plt.plot(T, uh_data, label = 'uh data')
+    plt.plot(T, uh_pinns, label = 'uh PINN')
+    plt.plot(T, uh_data, label = 'uh DDNN')
     if ModelInfo.benchmark == 2:
         uh_dPhys = network_dataPINN.predict(tx)[..., 1] 
-        plt.plot(T, uh_dPhys, label = 'uh dataAndPhysics')
+        plt.plot(T, uh_dPhys, label = 'uh HNN')
     plt.plot(ModelInfo.t_num, ModelInfo.uh_num[qua, :], label = 'uh reference')
-    plt.ylim(-2, 2)
+    plt.ylim(-3, 2)
     plt.xlabel('Time (s)')
     plt.ylabel('Velocity Density (m^2/s)')
     plt.title('Evolution of velocity density at x = 0')
@@ -93,14 +95,14 @@ if plot == 2:
         
         plt.ylim(minH, maxH)
         plt.plot(x_num, h_num[:, T[i]], label = 'h reference')
-        plt.plot(x_num, h_data, label = 'h data')
-        plt.plot(x_num, h_pinn, label = 'h PINNs')
+        plt.plot(x_num, h_data, label = 'h DDNN')
+        plt.plot(x_num, h_pinn, label = 'h PINN')
         if ModelInfo.benchmark == 2:
             sol_dPhy = network_dataPINN.predict(tx, batch_size=len(tx))
             h_dPhy   = sol_dPhy[..., 0]
             uh_dPhy  = sol_dPhy[..., 1] 
             uh_array.append([uh_data, uh_pinn, uh_dPhy])
-            plt.plot(x_num, h_dPhy, label = 'h dataAndPhysics')
+            plt.plot(x_num, h_dPhy, label = 'h HNN')
         else: 
             uh_array.append([uh_data, uh_pinn])
         plt.title('t={}'.format(round(t_cs, 3)))
@@ -131,10 +133,10 @@ if plot == 2:
         
         plt.ylim(minUH, maxUH)
         plt.plot(x_num, uh_num[:, T[i]], label = 'uh reference')
-        plt.plot(x_num, uh_data, label = 'uh data')
-        plt.plot(x_num, uh_pinn, label = 'uh PINNs')
+        plt.plot(x_num, uh_data, label = 'uh DDNN')
+        plt.plot(x_num, uh_pinn, label = 'uh PINN')
         if ModelInfo.benchmark == 2:
-            plt.plot(x_num, uh_dPhy, label = 'uh dataAndPhysics')
+            plt.plot(x_num, uh_dPhy, label = 'uh HNN')
         
         plt.title('t={}'.format(round(t_cs, 3)))
         plt.xlabel('x (m)')
@@ -152,7 +154,7 @@ if plot == 2:
 if plot == 3:
     
     def heat_map_plot(sol_array, title_array, t, x, titlefile, label_plot, ymin = -1, ymax = 1, save = True):
-        fig = plt.figure(figsize=(9,12))
+        fig = plt.figure(figsize=(5,6))
         gs = GridSpec(len(sol_array), 3)
 
         ymin = min(np.array(sol_array).reshape(-1, ))
@@ -200,16 +202,16 @@ if plot == 3:
         sol_dPhy = network_dataPINN.predict(tx)
         h_dPhy, uh_dPhy = [ sol_dPhy[..., i].reshape(t.shape) for i in range(sol_dPhy.shape[-1]) ]
         h_array = [h_num, h_data, h_pinn, h_dPhy]   
-        title_array = [' h numerical', 'h data', 'h PINNs', 'h dataAndPhysics']
+        title_array = [' h reference', 'h DDNN', 'h PINN', 'h HNN']
 
         uh_array = [uh_num, uh_data, uh_pinn, uh_dPhy]   
-        title_array_uh = [' uh numerical', 'uh data', 'uh PINNs', 'uh dataAndPhysics']
+        title_array_uh = [' uh reference', 'uh DDNN', 'uh PINN', 'uh HNN']
         
     else:
         h_array = [h_num, h_data, h_pinn]
-        title_array = [' h numerical', 'h data', 'h PINNs']
+        title_array = [' h reference', 'h DDNN', 'h PINN']
         uh_array = [uh_num, uh_data, uh_pinn]  
-        title_array_uh = [' uh numerical', 'uh data', 'uh PINNs']
+        title_array_uh = [' uh reference', 'uh DDNN', 'uh PINN']
         
     heat_map_plot(h_array, title_array, t, x, 'h_colormap_b'+str(ModelInfo.benchmark), 'h(t, x)', save = save)
     heat_map_plot(uh_array, title_array_uh, t, x, 'uh_colormap_b'+str(ModelInfo.benchmark), 'uh(t, x)', save = save)
@@ -218,3 +220,26 @@ if plot == 3:
         
     heat_map_plot([abs(uh_array[i] - uh_num) for i in range(1, len(uh_array))], title_array_uh[1:], \
                   t, x, 'uh_errorplot_b'+str(ModelInfo.benchmark), 'uh(t, x)', save = save)
+
+
+if plot == 4:
+    l_d = pd.read_csv('losses/CSV/tanh_data.csv')
+    l_p = pd.read_csv('losses/CSV/tanh_PINNs.csv')
+    l_h = pd.read_csv('losses/CSV/tanh_dataAndPhysics.csv')
+    
+    plt.title('Losses for different networks')
+    plt.xlabel('Iteration')
+    plt.ylabel('Log loss')
+    plt.plot(l_d.index, np.log(l_d), label = 'DDNN')
+    plt.plot(l_p.index, np.log(l_p), label = 'PINN')
+    plt.plot(l_h.index, np.log(l_h), label = 'HNN')
+    plt.legend()
+    plt.savefig('losses/allNetworks.png')
+    plt.show()
+    
+    
+    
+    
+    
+    
+    

@@ -7,7 +7,7 @@ from lib.SWE1D import *
 class InputVariables:
     def __init__(self, num_train = 200, num_test = 200, xstart = 0, \
                  xend = 1, tstart = 0, tend = 0.15, layers = 6, \
-                 nodes = 30, train = True, mode = 'data',\
+                 nodes = 30, train = True, mode = 'dataAndPhysics',\
                  benchmark = 2):
         
         # number of training samples

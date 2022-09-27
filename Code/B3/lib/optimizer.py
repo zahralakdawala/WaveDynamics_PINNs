@@ -150,6 +150,7 @@ class L_BFGS_B:
         
         if (ModelInfo.mode == 'PINNs') or (ModelInfo.mode == 'dataAndPhysics'):
             self.loss2.append(loss_arrays[1])
+            
         if ModelInfo.mode == 'dataAndPhysics':
             self.loss3.append(loss_arrays[2])
 
@@ -171,28 +172,62 @@ class L_BFGS_B:
         self.progbar.on_epoch_end(1)
         self.progbar.on_train_end()
         
-        plt.title('Losses')
+        name = ''
+        
+        if ModelInfo.mode == 'data':
+            name = 'DDNN'
+        elif ModelInfo.mode == 'PINNs':
+            name = "PINN"
+        else:
+            name = "HNN"
+            
+        plt.title('Losses ' + name)
         plt.xlabel('Iteration')
         plt.ylabel('Log Loss')
         
         if ModelInfo.mode == 'data':
-            plt.plot(np.log(self.loss1), label = 'Loss data')
+            plt.plot(np.log(self.loss1), label = 'data')
+            
         if ModelInfo.mode == 'PINNs':
-            plt.plot(np.log(self.loss1), label = 'Loss PDE')
-            plt.plot(np.log(self.loss2), label = 'Loss ini')
+            plt.plot(np.log(self.loss1), label = 'pde')
+            plt.plot(np.log(self.loss2), label = 'initial')
+        
         if ModelInfo.mode == 'dataAndPhysics':
-            plt.plot(np.log(self.loss1), label = 'Loss PDE')
-            plt.plot(np.log(self.loss2), label = 'Loss ini')      
-            plt.plot(np.log(self.loss3), label = 'Loss data')
+            plt.plot(np.log(self.loss1), label = 'pde')
+            plt.plot(np.log(self.loss2), label = 'initial')
+            plt.plot(np.log(self.loss3), label = 'data')
 
-        plt.plot(np.log(self.losses), label = 'Overall loss', color = 'black')
         plt.legend()
         plt.savefig('losses/combined_loss_bc' + str(ModelInfo.benchmark) + '_' + ModelInfo.mode+'.png')
         plt.show()
+        
+        if ModelInfo.mode == 'data':
+            loss1 = np.array(self.loss1)
+            np.savetxt('losses/CSV/loss_domain_'+ ModelInfo.mode +'.csv', loss1, delimiter = ',')
+
+            
+        if ModelInfo.mode == 'PINNs':
+            loss1 = np.array(self.loss1)
+            np.savetxt('losses/CSV/loss_PDE_'+ ModelInfo.mode +'.csv', loss1, delimiter = ',')
+            loss2 = np.array(self.loss2)
+            np.savetxt('losses/CSV/loss_u_0_'+ ModelInfo.mode +'.csv', loss2, delimiter = ',')
+
+        
+        if ModelInfo.mode == 'dataAndPhysics':
+            loss1 = np.array(self.loss1)
+            np.savetxt('losses/CSV/loss_PDE_'+ ModelInfo.mode +'.csv', loss1, delimiter = ',')
+            loss2 = np.array(self.loss2)
+            np.savetxt('losses/CSV/loss_u_0_'+ ModelInfo.mode +'.csv', loss2, delimiter = ',')
+            loss3 = np.array(self.loss3)
+            np.savetxt('losses/CSV/loss_domain_'+ ModelInfo.mode +'.csv', loss3, delimiter = ',')
+
+        
+        act1 = np.array(self.losses)
+        np.savetxt('losses/CSV/tanh_'+ ModelInfo.mode +'.csv', act1, delimiter = ',')
         
         plt.title('Loss in L_BFGS')
         plt.xlabel('Iteration')
         plt.ylabel('Log Loss')
         plt.plot(np.arange(len(self.losses)), np.log(self.losses))
-        plt.savefig('losses/loss_NS_'+ModelInfo.mode+'.png')
+        plt.savefig('losses/loss_'+ModelInfo.mode+'.png')
         plt.show()

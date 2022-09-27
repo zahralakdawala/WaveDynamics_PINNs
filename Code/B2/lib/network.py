@@ -43,10 +43,10 @@ class Network:
         x = inputs
         for layer in layers:
             x = tf.keras.layers.Dense(layer, activation=self.activations[activation],
-                kernel_initializer='he_normal')(x)
+                kernel_initializer='orthogonal')(x)
 
         # output layer
         outputs = tf.keras.layers.Dense(num_outputs,
-            kernel_initializer='he_normal')(x)
+            kernel_initializer='orthogonal')(x)
 
         return tf.keras.models.Model(inputs=inputs, outputs=outputs)

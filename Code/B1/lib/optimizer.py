@@ -187,7 +187,7 @@ class L_BFGS_B:
         plt.ylabel('Log Loss' )
         
         if ModelInfo.mode == 'data':
-            plt.plot(np.log(self.loss1), label = 'u_domain')
+            plt.plot(np.log(self.loss1), label = 'u_data')
             plt.plot(np.log(self.loss2), label = 'u_b')
             
         if ModelInfo.mode == 'PINNs':
@@ -198,7 +198,7 @@ class L_BFGS_B:
             
         if ModelInfo.mode == 'dataAndPhysics':
             plt.plot(np.log(self.loss1), label = 'u_pde')
-            plt.plot(np.log(self.loss2), label = 'u_domain')
+            plt.plot(np.log(self.loss2), label = 'u_data')
             plt.plot(np.log(self.loss3), label = 'u_0')
             plt.plot(np.log(self.loss4), label = "du_0")
             plt.plot(np.log(self.loss5), label = 'u_b')
