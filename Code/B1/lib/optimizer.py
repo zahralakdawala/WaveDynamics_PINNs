@@ -182,26 +182,36 @@ class L_BFGS_B:
         
         ModelInfo = benchmark()
         
-        plt.title('Losses - '+ ModelInfo.mode)
+        if ModelInfo.mode == 'data':
+            name = 'DDNN'
+        elif ModelInfo.mode == 'PINNs':
+            name = 'PINN'
+        else:
+            name = 'HNN'
+                
+        
+        
+        plt.title('Losses '+ name)
         plt.xlabel('Iteration')
         plt.ylabel('Log Loss' )
-        
+                    
+            
         if ModelInfo.mode == 'data':
-            plt.plot(np.log(self.loss1), label = 'u_data')
-            plt.plot(np.log(self.loss2), label = 'u_b')
+            plt.plot(np.log(self.loss1), label = 'u_data', color = 'blue')
+            plt.plot(np.log(self.loss2), label = 'u_b', color = 'orange')
             
         if ModelInfo.mode == 'PINNs':
-            plt.plot(np.log(self.loss1), label = 'u_pde')
-            plt.plot(np.log(self.loss2), label = 'u_0')
-            plt.plot(np.log(self.loss3), label = "du_0")
-            plt.plot(np.log(self.loss4), label = 'u_b')
+            plt.plot(np.log(self.loss1), label = 'u_pde', color = 'green')
+            plt.plot(np.log(self.loss2), label = 'u_0', color = 'red')
+            plt.plot(np.log(self.loss3), label = "du_0", color = 'brown')
+            plt.plot(np.log(self.loss4), label = 'u_b', color = 'orange')
             
         if ModelInfo.mode == 'dataAndPhysics':
-            plt.plot(np.log(self.loss1), label = 'u_pde')
-            plt.plot(np.log(self.loss2), label = 'u_data')
-            plt.plot(np.log(self.loss3), label = 'u_0')
-            plt.plot(np.log(self.loss4), label = "du_0")
-            plt.plot(np.log(self.loss5), label = 'u_b')
+            plt.plot(np.log(self.loss1), label = 'u_pde', color = 'green')
+            plt.plot(np.log(self.loss2), label = 'u_data', color = 'blue')
+            plt.plot(np.log(self.loss3), label = 'u_0', color = 'red')
+            plt.plot(np.log(self.loss4), label = "du_0", color = 'brown')
+            plt.plot(np.log(self.loss5), label = 'u_b', color = 'orange')
            
         plt.legend()
         plt.savefig('losses/combined_losses_reduction_'+ ModelInfo.mode +'.png')
@@ -235,14 +245,15 @@ class L_BFGS_B:
             loss5 = np.array(self.loss5)
             np.savetxt('losses/CSV/loss_u_b_'+ ModelInfo.mode +'.csv', loss5, delimiter = ',')
             
-            
+        act1 = np.array(self.losses)
+        np.savetxt('losses/CSV/tanh_'+ ModelInfo.mode +'.csv', act1, delimiter = ',')
+        
+        '''
         plt.title('Loss in L_BFGS')
         plt.xlabel('Iteration')
         plt.ylabel('Log Loss')
         plt.plot(np.arange(len(self.losses)), np.log(self.losses))
-        act1 = np.array(self.losses)
-        np.savetxt('losses/CSV/tanh_'+ ModelInfo.mode +'.csv', act1, delimiter = ',')
         plt.savefig('losses/Loss_Wave_'+ ModelInfo.mode +'.png')
         plt.show()
-        
+        '''
         

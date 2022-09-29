@@ -32,7 +32,7 @@ class L_BFGS_B:
         progbar: progress bar
     """
 
-    def __init__(self, model, x_train, y_train, factr=10, pgtol=1e-12, m=500, maxls=500, maxiter=10000):
+    def __init__(self, model, x_train, y_train, factr=100, pgtol=1e-15, m=50, maxls=50, maxiter=10000):
         """
         Args:
             model: optimization target model.
@@ -101,15 +101,15 @@ class L_BFGS_B:
 
         with tf.GradientTape() as g:
             loss = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x), y))
-            loss1 = tf.reduce_mean(tf.keras.losses.mse(self.model(x)[0], y[0]))
+            loss1 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[0], y[0]))
             loss_arrays = [loss1]
             if (ModelInfo.mode == 'PINNs') or (ModelInfo.mode == 'dataAndPhysics'):
-                loss2 = tf.reduce_mean(tf.keras.losses.mse(self.model(x)[1], y[1]))
+                loss2 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[1], y[1]))
                 loss_arrays = loss_arrays + [loss2]
             if ModelInfo.mode == 'dataAndPhysics':
-                loss3 = tf.reduce_mean(tf.keras.losses.mse(self.model(x)[2], y[2]))
+                loss3 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[2], y[2]))
                 loss_arrays = loss_arrays + [loss3]
-                
+                loss = sum(loss_arrays)
         grads = g.gradient(loss, self.model.trainable_variables)
         return loss, grads, loss_arrays
 
@@ -186,16 +186,16 @@ class L_BFGS_B:
         plt.ylabel('Log Loss')
         
         if ModelInfo.mode == 'data':
-            plt.plot(np.log(self.loss1), label = 'data')
+            plt.plot(np.log(self.loss1), label = 'data', color = 'blue')
             
         if ModelInfo.mode == 'PINNs':
-            plt.plot(np.log(self.loss1), label = 'pde')
-            plt.plot(np.log(self.loss2), label = 'initial')
+            plt.plot(np.log(self.loss1), label = 'pde', color = 'green')
+            plt.plot(np.log(self.loss2), label = 'initial', color = 'red')
         
         if ModelInfo.mode == 'dataAndPhysics':
-            plt.plot(np.log(self.loss1), label = 'pde')
-            plt.plot(np.log(self.loss2), label = 'initial')
-            plt.plot(np.log(self.loss3), label = 'data')
+            plt.plot(np.log(self.loss1), label = 'pde', color = 'green')
+            plt.plot(np.log(self.loss2), label = 'initial', color = 'red')
+            plt.plot(np.log(self.loss3), label = 'data', color = 'blue')
 
         plt.legend()
         plt.savefig('losses/combined_loss_bc' + str(ModelInfo.benchmark) + '_' + ModelInfo.mode+'.png')
@@ -224,10 +224,11 @@ class L_BFGS_B:
         
         act1 = np.array(self.losses)
         np.savetxt('losses/CSV/tanh_'+ ModelInfo.mode +'.csv', act1, delimiter = ',')
-        
+        '''
         plt.title('Loss in L_BFGS')
         plt.xlabel('Iteration')
         plt.ylabel('Log Loss')
         plt.plot(np.arange(len(self.losses)), np.log(self.losses))
         plt.savefig('losses/loss_'+ModelInfo.mode+'.png')
         plt.show()
+        '''

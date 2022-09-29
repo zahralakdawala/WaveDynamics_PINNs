@@ -12,7 +12,7 @@ class benchmark:
         self.xstart = xstart
         self.xend   = xend
         self.Nx     = 100
-        self.mode   = 'data'  # 'PINNs' or 'data'
+        self.mode   = 'dataAndPhysics'  # 'PINNs' or 'data'
         
         
         self.tstart = tstart
@@ -20,7 +20,7 @@ class benchmark:
         self.tend   = tend
         self.Nt     = 100
 
-        self.num_train_samples = 100
+        self.num_train_samples = 400
         self.num_test_samples  = 100
         
         self.train = True

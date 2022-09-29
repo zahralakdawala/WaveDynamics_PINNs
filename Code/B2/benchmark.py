@@ -43,7 +43,7 @@ class InputVariables:
             sign = -1
             if self.mode == 'data':
                 sign = 1
-            idx = (np.arange(len(t_num))[::20])[1:]
+            idx = (np.arange(len(t_num))[::15])[1:]
 
             x, t, hsol, uhsol = [], [], [], []
             

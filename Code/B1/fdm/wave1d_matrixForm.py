@@ -11,6 +11,7 @@ sys.path.append('../B1')
 from benchmark2 import *
 
 
+
 def FDM_1D(xarray, tarray, c, bc_start, bc_end, plotting = True):
     # Problem Setup
     ModelInfo = benchmark()

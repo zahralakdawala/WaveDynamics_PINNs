@@ -11,7 +11,7 @@ network_data     = load_model('trained_networks/SWE_maxiter10000_b'+str(benchmar
 if benchmark == 2:
     network_dataPINN = load_model('trained_networks/SWE_maxiter10000_b2_dataAndPhysics.h5')
 
-plot = 4
+plot = 1
 
 save = True
 
@@ -28,16 +28,17 @@ if plot == 1:
     h_pinns = network_PINNs.predict(tx)[..., 0]
     h_data  = network_data.predict(tx)[..., 0]
     
-    plt.plot(T, h_pinns, label = 'h PINN')
-    plt.plot(T, h_data, label = 'h DDNN')
+    plt.plot(ModelInfo.t_num, ModelInfo.h_num[qua, :], label = 'h reference', color = 'red')
+    plt.plot(T, h_data, label = 'h DDNN', color = 'orange')
+    plt.plot(T, h_pinns, label = 'h PINN', color = 'blue')
+    
     if ModelInfo.benchmark == 2:
         h_dPhys = network_dataPINN.predict(tx)[..., 0]
-        plt.plot(T, h_dPhys, label = 'h HNN')
-    plt.plot(ModelInfo.t_num, ModelInfo.h_num[qua, :], label = 'h reference')
+        plt.plot(T, h_dPhys, label = 'h HNN', color = 'green')
     plt.ylim(1.5, 2.4)
     plt.xlabel('Time (s)')
     plt.ylabel('Height (m)')
-    plt.title('Evolution of height at x = 0')
+    plt.title('Evolution of height at x = 0.5')
     plt.legend()
     if save:
         plt.savefig('plots/h_evolution_plot_b'+str(ModelInfo.benchmark)+'.png')
@@ -45,17 +46,19 @@ if plot == 1:
     
     uh_pinns = network_PINNs.predict(tx)[..., 1] * network_PINNs.predict(tx)[..., 0]
     uh_data  = network_data.predict(tx)[..., 1] 
-        
-    plt.plot(T, uh_pinns, label = 'uh PINN')
-    plt.plot(T, uh_data, label = 'uh DDNN')
+    
+    plt.plot(ModelInfo.t_num, ModelInfo.uh_num[qua, :], label = 'uh reference', color = 'red')
+    plt.plot(T, uh_data, label = 'uh DDNN', color = 'orange')
+    plt.plot(T, uh_pinns, label = 'uh PINN', color = 'blue')
+    
     if ModelInfo.benchmark == 2:
         uh_dPhys = network_dataPINN.predict(tx)[..., 1] 
-        plt.plot(T, uh_dPhys, label = 'uh HNN')
-    plt.plot(ModelInfo.t_num, ModelInfo.uh_num[qua, :], label = 'uh reference')
+        plt.plot(T, uh_dPhys, label = 'uh HNN', color = 'green')
+    
     plt.ylim(-3, 2)
     plt.xlabel('Time (s)')
     plt.ylabel('Velocity Density (m^2/s)')
-    plt.title('Evolution of velocity density at x = 0')
+    plt.title('Evolution of velocity density at x = 0.5')
     plt.legend()
     if save:
         plt.savefig('plots/uh_evolution_plot_b'+str(ModelInfo.benchmark)+'.png')
@@ -94,15 +97,15 @@ if plot == 2:
         uh_pinn  = sol_pinn[..., 1] * sol_pinn[..., 0]
         
         plt.ylim(minH, maxH)
-        plt.plot(x_num, h_num[:, T[i]], label = 'h reference')
-        plt.plot(x_num, h_data, label = 'h DDNN')
-        plt.plot(x_num, h_pinn, label = 'h PINN')
+        plt.plot(x_num, h_num[:, T[i]], label = 'h reference', color = 'red')
+        plt.plot(x_num, h_data, label = 'h DDNN', color = 'orange')
+        plt.plot(x_num, h_pinn, label = 'h PINN', color = 'blue')
         if ModelInfo.benchmark == 2:
             sol_dPhy = network_dataPINN.predict(tx, batch_size=len(tx))
             h_dPhy   = sol_dPhy[..., 0]
             uh_dPhy  = sol_dPhy[..., 1] 
             uh_array.append([uh_data, uh_pinn, uh_dPhy])
-            plt.plot(x_num, h_dPhy, label = 'h HNN')
+            plt.plot(x_num, h_dPhy, label = 'h HNN', color = 'green')
         else: 
             uh_array.append([uh_data, uh_pinn])
         plt.title('t={}'.format(round(t_cs, 3)))
@@ -132,8 +135,8 @@ if plot == 2:
             uh_data, uh_pinn, uh_dPhy = uh_array[i]
         
         plt.ylim(minUH, maxUH)
-        plt.plot(x_num, uh_num[:, T[i]], label = 'uh reference')
-        plt.plot(x_num, uh_data, label = 'uh DDNN')
+        plt.plot(x_num, uh_num[:, T[i]], label = 'uh reference', color = 'red')
+        plt.plot(x_num, uh_data, label = 'uh DDNN', color = 'orange')
         plt.plot(x_num, uh_pinn, label = 'uh PINN')
         if ModelInfo.benchmark == 2:
             plt.plot(x_num, uh_dPhy, label = 'uh HNN')
@@ -154,7 +157,7 @@ if plot == 2:
 if plot == 3:
     
     def heat_map_plot(sol_array, title_array, t, x, titlefile, label_plot, ymin = -1, ymax = 1, save = True):
-        fig = plt.figure(figsize=(5,6))
+        fig = plt.figure(figsize=(8,7))
         gs = GridSpec(len(sol_array), 3)
 
         ymin = min(np.array(sol_array).reshape(-1, ))
@@ -169,7 +172,7 @@ if plot == 3:
             plt.pcolormesh(t, x, sol_array[i], cmap='rainbow', norm=Normalize(vmin=vmin, vmax=vmax))
 
             cbar = plt.colorbar(pad=0.05, aspect=10)
-            cbar.set_label('u(t,x)')
+            cbar.set_label(label_plot)
             cbar.mappable.set_clim(vmin, vmax)
         plt.tight_layout()
         if save:
@@ -230,9 +233,9 @@ if plot == 4:
     plt.title('Losses for different networks')
     plt.xlabel('Iteration')
     plt.ylabel('Log loss')
-    plt.plot(l_d.index, np.log(l_d), label = 'DDNN')
-    plt.plot(l_p.index, np.log(l_p), label = 'PINN')
-    plt.plot(l_h.index, np.log(l_h), label = 'HNN')
+    plt.plot(l_d.index, np.log(l_d), label = 'DDNN', color = 'orange')
+    plt.plot(l_p.index, np.log(l_p), label = 'PINN', color = 'blue')
+    plt.plot(l_h.index, np.log(l_h), label = 'HNN', color = 'green')
     plt.legend()
     plt.savefig('losses/allNetworks.png')
     plt.show()
