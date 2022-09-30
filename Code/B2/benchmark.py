@@ -46,7 +46,6 @@ class InputVariables:
                 sign = 1
             idx = (np.arange(len(t_num))[::1])[1:]
             self.permute = np.random.permutation(len(idx))
-            print(self.permute)
 
             x, t, hsol, uhsol = [], [], [], []
             
@@ -63,7 +62,6 @@ class InputVariables:
             self.usol  = self.uhsol / self.hsol
             
             self.num_train_samples = len(self.tsol)
-            print(self.num_train_samples)
         
 #InputVariables()
 
