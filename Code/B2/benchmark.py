@@ -9,8 +9,8 @@ from lib.SWE1D import *
 
 class InputVariables:
     def __init__(self, num_train = 200, num_test = 200, xstart = 0, \
-                 xend = 1, tstart = 0, tend = 0.15, layers = 10, \
-                 nodes = 30, train = True, mode = 'dataAndPhysics',\
+                 xend = 1, tstart = 0, tend = 0.15, layers = 5, \
+                 nodes = 30, train = True, mode = 'data',\
                  benchmark = 1):
         
         # number of training samples
@@ -39,11 +39,14 @@ class InputVariables:
         self.x_num = x_num
         self.t_num = t_num
             
+        
         if self.mode in ['dataAndPhysics', 'data']:
             sign = -1
             if self.mode == 'data':
                 sign = 1
-            idx = (np.arange(len(t_num))[::15])[1:]
+            idx = (np.arange(len(t_num))[::1])[1:]
+            self.permute = np.random.permutation(len(idx))
+            print(self.permute)
 
             x, t, hsol, uhsol = [], [], [], []
             
@@ -53,10 +56,11 @@ class InputVariables:
                 x.append(x_num)
                 t.append([t_num[i]] * len(x_num))
 
-            self.tsol  = np.array(t).reshape(-1, 1)   
-            self.xsol  = np.array(x).reshape(-1, 1)
-            self.hsol  = np.array(hsol).reshape(-1, 1)
-            self.uhsol = np.array(uhsol).reshape(-1, 1)
+            self.tsol  = np.array(t).reshape(-1, 1)#[self.permute] 
+            self.xsol  = np.array(x).reshape(-1, 1)#[self.permute] 
+            self.hsol  = np.array(hsol).reshape(-1, 1)#[self.permute] 
+            self.uhsol = np.array(uhsol).reshape(-1, 1)#[self.permute] 
+            self.usol  = self.uhsol / self.hsol
             
             self.num_train_samples = len(self.tsol)
             print(self.num_train_samples)
@@ -67,15 +71,15 @@ class TrainingInput(InputVariables):
     def __init__(self):
         InputVariables.__init__(self)
         
-        self.tx_eqn = np.random.rand(self.num_train_samples, 2)
+        self.tx_eqn = np.random.randn(self.num_train_samples, 2)
         self.tx_eqn[..., 0] = self.tend*self.tx_eqn[..., 0]
         self.tx_eqn[..., 1] = self.xend*self.tx_eqn[..., 1]
         
-        self.tx_ini = np.random.rand(self.num_train_samples, 2)
+        self.tx_ini = np.random.randn(self.num_train_samples, 2)
         self.tx_ini[..., 0] = 0
         self.tx_ini[..., 1] = self.xend*self.tx_ini[..., 1]
 
-        self.tx_bnd = np.random.rand(self.num_train_samples, 2)
+        self.tx_bnd = np.random.randn(self.num_train_samples, 2)
         self.tx_bnd[..., 0] = self.tend*self.tx_bnd[..., 0]
         self.tx_bnd[..., 1] = self.xend*np.round(self.tx_bnd[..., 1])
 
@@ -100,10 +104,13 @@ class TrainingOutput(TrainingInput):
         t_flat  = np.linspace(self.tstart, self.tend, self.num_train_samples)
         self.zeros   = np.zeros((self.num_train_samples, 2))
     
-        self.hu_ini  = self.initial_conditions(self.tx_ini[..., 1], noise = True)
+        self.hu_ini  = self.initial_conditions(self.tx_ini[..., 1], noise = False)
 
-        if self.mode in ['dataAndPhysics', 'data']:
+        if self.mode =='dataAndPhysics':
+            self.hu_sol  = np.concatenate([self.hsol, self.usol], axis = 1)
+        elif self.mode == 'data':
             self.hu_sol  = np.concatenate([self.hsol, self.uhsol], axis = 1)
+            
 
     def get_ytrain(self):
         if self.mode == 'dataAndPhysics':

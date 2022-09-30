@@ -6,8 +6,8 @@ def shallow_water_1d_test (benchmark, xend, tend):
 
 #  Set parameters.
 #
-  nx = 41
-  nt = 100
+  nx = 100
+  nt = 250
   x_length = xend
   t_length = tend
   g = 9.8

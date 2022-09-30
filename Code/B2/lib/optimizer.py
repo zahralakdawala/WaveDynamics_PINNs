@@ -32,7 +32,7 @@ class L_BFGS_B:
         progbar: progress bar
     """
 
-    def __init__(self, model, x_train, y_train, factr=100, pgtol=1e-15, m=50, maxls=50, maxiter=10000):
+    def __init__(self, model, x_train, y_train, factr=1e-12, pgtol=1e-15, m=50, maxls=100, maxiter=10000):
         """
         Args:
             model: optimization target model.
@@ -101,15 +101,22 @@ class L_BFGS_B:
 
         with tf.GradientTape() as g:
             loss = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x), y))
-            loss1 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[0], y[0]))
+            if ModelInfo.mode == 'data':
+                loss1 = loss
+            else:
+                loss1 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[0], y[0]))
+                
+            
             loss_arrays = [loss1]
-            if (ModelInfo.mode == 'PINNs') or (ModelInfo.mode == 'dataAndPhysics'):
-                loss2 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[1], y[1]))
-                loss_arrays = loss_arrays + [loss2]
+            
             if ModelInfo.mode == 'dataAndPhysics':
                 loss3 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[2], y[2]))
                 loss_arrays = loss_arrays + [loss3]
-                loss = sum(loss_arrays)
+                
+            if (ModelInfo.mode == 'PINNs') or (ModelInfo.mode == 'dataAndPhysics'):
+                loss2 = tf.reduce_mean(tf.keras.losses.mean_squared_error(self.model(x)[1], y[1]))
+                loss_arrays = loss_arrays + [loss2]
+                #loss = sum(loss_arrays)
         grads = g.gradient(loss, self.model.trainable_variables)
         return loss, grads, loss_arrays
 

@@ -55,7 +55,14 @@ class PINN:
         tx_sol = tf.keras.layers.Input(shape=(2,))
 
         # Solution learning
+        '''
+        if ModelInfo.mode == 'dataAndPhysics':
+            vy_sol = self.network(tx_eqn)
+        else:
+        '''
         vy_sol = self.network(tx_sol)
+        
+
 
         if ModelInfo.mode in ['PINNs', 'dataAndPhysics']:
             # compute gradients relative to equation
@@ -82,6 +89,7 @@ class PINN:
             
             #vy_eqn = tf.concat([v_eqn, y_eqn], axis=-1)
             vy_eqn = tf.concat([eqn1, eqn2], axis=-1)
+            
 
             # Initial condition
             vy_ini = self.network(tx_ini)
@@ -90,9 +98,8 @@ class PINN:
             
             h_bnd, u_bnd, _, dh_bnd, _, du_bnd = self.grads(tx_bnd)
             # compute boundary condition loss
-            duhbnd = h*du_bnd + u*dh_bnd
             
-            bnd = tf.concat([dh_bnd, dh_bnd], axis=-1)
+            bnd = tf.concat([du_bnd, du_bnd], axis=-1)
             
             if ModelInfo.mode == "dataAndPhysics":
                 return tf.keras.models.Model(

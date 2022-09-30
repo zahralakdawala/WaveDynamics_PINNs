@@ -26,6 +26,7 @@ if __name__ == '__main__':
     
         # training input and output
         x_train = ModelInfo.xtrain
+        
         y_train = ModelInfo.ytrain
     
         # train the model using L-BFGS-B algorithm

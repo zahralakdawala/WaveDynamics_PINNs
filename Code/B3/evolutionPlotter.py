@@ -11,9 +11,9 @@ network_data     = load_model('trained_networks/SWE_maxiter10000_b'+str(benchmar
 if benchmark == 2:
     network_dataPINN = load_model('trained_networks/SWE_maxiter10000_b2_dataAndPhysics.h5')
 
-plot = 1
+plot = 3
 
-save = True
+save = False
 
 if plot == 1:
     
@@ -168,7 +168,7 @@ if plot == 3:
             plt.title(title_array[i])
             plt.xlabel('t')
             plt.ylabel('x')
-            vmin, vmax = ymin, ymax
+            vmin, vmax = ymin -0.05, ymax+0.1
             plt.pcolormesh(t, x, sol_array[i], cmap='rainbow', norm=Normalize(vmin=vmin, vmax=vmax))
 
             cbar = plt.colorbar(pad=0.05, aspect=10)

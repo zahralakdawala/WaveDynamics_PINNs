@@ -10,7 +10,7 @@ network_PINNs    = load_model('trained_networks/SWE_maxiter10000_b'+str(benchmar
 network_data     = load_model('trained_networks/SWE_maxiter10000_b'+str(benchmark)+'_data.h5')
 network_dataPINN = load_model('trained_networks/SWE_maxiter10000_b1_dataAndPhysics.h5')
 
-plot = 4
+plot = 3
 save = True
 
 if plot == 1:
@@ -46,7 +46,7 @@ if plot == 1:
     plt.plot(T, uh_pinns, label = 'uh PINN', color = 'blue')
     plt.plot(T, uh_data, label = 'uh DDNN', color = 'orange')
     uh_dPhys = network_dataPINN.predict(tx)[..., 1] 
-    plt.plot(T, uh_dPhys, label = 'uh HNN', color = 'green')
+    plt.plot(T, uh_dPhys*h_dPhys, label = 'uh HNN', color = 'green')
     plt.plot(ModelInfo.t_num, ModelInfo.uh_num[qua, :], label = 'uh reference', color = 'red')
     plt.ylim(-0.2, 0.2)
     plt.xlabel('Time (s)')
@@ -95,7 +95,7 @@ if plot == 2:
         sol_dPhy = network_dataPINN.predict(tx, batch_size=len(tx))
         h_dPhy   = sol_dPhy[..., 0]
         uh_dPhy  = sol_dPhy[..., 1] 
-        uh_array.append([uh_data, uh_pinn, uh_dPhy])
+        uh_array.append([uh_data, uh_pinn, uh_dPhy*h_dPhy])
         plt.plot(x_num, h_dPhy, label = 'h HNN', color = 'green')
         plt.plot(x_num, h_num[:, T[i]], label = 'h reference', color = 'red')
 
@@ -146,12 +146,16 @@ if plot == 2:
         
 if plot == 3:
     
-    def heat_map_plot(sol_array, title_array, t, x, titlefile, label_plot, ymin = -1, ymax = 1, save = True):
+    def heat_map_plot(sol_array, title_array, t, x, titlefile, label_plot, ymin = -1, ymax = 1, save = True, fitColorMap = True):
         fig = plt.figure(figsize=(8,7))
         gs = GridSpec(len(sol_array), 3)
-
-        ymin = min(np.array(sol_array).reshape(-1, ))
-        ymax = max(np.array(sol_array).reshape(-1, ))
+        
+        if fitColorMap:
+            fit = 0.1
+        else:
+            fit = 0
+        ymin = min(np.array(sol_array).reshape(-1, )) - fit
+        ymax = max(np.array(sol_array).reshape(-1, )) + fit
         
         for i in range(len(sol_array)):
             plt.subplot(gs[i, :])
@@ -196,17 +200,17 @@ if plot == 3:
     h_array = [h_num, h_data, h_pinn, h_dPhy]   
     title_array = [' h reference', 'h DDNN', 'h PINN', 'h HNN']
 
-    uh_array = [uh_num, uh_data, uh_pinn, uh_dPhy]   
+    uh_array = [uh_num, uh_data, uh_pinn, uh_dPhy*h_dPhy]   
     title_array_uh = [' uh reference', 'uh DDNN', 'uh PINN', 'uh HNN']
         
         
     heat_map_plot(h_array, title_array, t, x, 'h_colormap_b'+str(ModelInfo.benchmark), 'h(t, x)', save = save)
     heat_map_plot(uh_array, title_array_uh, t, x, 'uh_colormap_b'+str(ModelInfo.benchmark), 'uh(t, x)', save = save)
     heat_map_plot([abs(h_array[i] - h_num) for i in range(1, len(h_array))], title_array[1:], \
-                  t, x, 'h_errorplot_b'+str(ModelInfo.benchmark), 'h(t, x)', save = save)
+                  t, x, 'h_errorplot_b'+str(ModelInfo.benchmark), 'h(t, x)', save = save, fitColorMap=False)
         
     heat_map_plot([abs(uh_array[i] - uh_num) for i in range(1, len(uh_array))], title_array_uh[1:], \
-                  t, x, 'uh_errorplot_b'+str(ModelInfo.benchmark), 'uh(t, x)', save = save)
+                  t, x, 'uh_errorplot_b'+str(ModelInfo.benchmark), 'uh(t, x)', save = save, fitColorMap=False)
 
 if plot == 4:
     l_d = pd.read_csv('losses/CSV/tanh_data.csv')
